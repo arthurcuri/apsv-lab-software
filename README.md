@@ -9,4 +9,4 @@
 
 ## Professor
 
-*Rodrigo de Carvalho
+* Rodrigo de Carvalho
