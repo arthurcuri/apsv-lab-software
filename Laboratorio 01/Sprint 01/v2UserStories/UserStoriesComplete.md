@@ -11,9 +11,11 @@ Os alunos precisam garantir sua participação nas disciplinas obrigatórias e o
 Permitir que o aluno realize sua matrícula de forma eficiente e dentro dos critérios definidos pela instituição.
 
 ### Regras de negócio:
+```
 - O aluno pode escolher até 4 disciplinas obrigatórias e 2 optativas.
 - O sistema deve verificar se há vagas disponíveis antes de confirmar a matrícula.
 - O aluno só pode se matricular dentro do período de matrículas.
+```
 
 ### Critérios de Aceite:
 #### Critério 1: Limite de disciplinas  
@@ -44,9 +46,11 @@ Os alunos podem precisar cancelar disciplinas para organizar melhor sua rotina a
 Permitir que os alunos cancelem disciplinas dentro do período de matrícula.
 
 ### Regras de negócio:
+```
 - O aluno pode cancelar disciplinas apenas dentro do período de matrículas.
 - O sistema deve atualizar automaticamente a quantidade de vagas disponíveis na disciplina.
 - O sistema deve notificar o aluno sobre o cancelamento bem-sucedido.
+```
 
 ### Critérios de Aceite  
 
@@ -78,8 +82,10 @@ Os alunos precisam acompanhar sua carga horária e horários para organizar melh
 Facilitar o acesso às informações sobre as disciplinas matriculadas.
 
 ### Regras de negócio:
+```
 - O aluno pode visualizar todas as disciplinas nas quais está matriculado.
 - As informações devem incluir nome da disciplina, professor e horários.
+```
 
 ### Critérios de Aceite:
 #### Critério 1: Visualização da grade  
@@ -100,9 +106,11 @@ A instituição precisa manter um controle eficiente sobre as disciplinas oferta
 Permitir que a secretaria administre as disciplinas conforme necessário.
 
 ### Regras de negócio:
+```
 - A secretaria pode criar novas disciplinas com nome, carga horária e professor responsável.
 - A secretaria pode editar informações das disciplinas antes do período de matrículas.
 - A secretaria pode remover disciplinas que não tenham alunos matriculados.
+```
 
 ### Critérios de Aceite:
 
@@ -134,9 +142,11 @@ Os professores precisam ser atribuídos corretamente às disciplinas para garant
 Facilitar o gerenciamento de professores e suas disciplinas.
 
 ### Regras de negócio:
+```
 - A secretaria pode cadastrar e editar informações dos professores.
 - Um professor pode ser vinculado a várias disciplinas.
 - O professor deve ser notificado quando for designado a uma nova disciplina.
+```
 
 ### Critérios de Aceite:
 #### Critério 1: Cadastro de professor  
@@ -162,8 +172,10 @@ Os professores precisam saber quais alunos estão matriculados para planejar sua
 Facilitar o acesso dos professores à lista de alunos matriculados.
 
 ### Regras de negócio:
+```
 - O professor pode acessar a lista de alunos nas disciplinas.
 - As informações devem incluir nome do aluno e matrícula.
+```
 
 ### Critérios de Aceite:
 #### Critério 1: Visualização da lista de alunos  
@@ -184,9 +196,11 @@ A universidade precisa garantir que os pagamentos sejam processados corretamente
 Automatizar a notificação do sistema de cobranças.
 
 ### Regras de negócio:
+```
 - Sempre que um aluno finalizar sua matrícula, os dados devem ser enviados ao sistema de cobranças.
 - O sistema de cobranças deve receber a lista de disciplinas e o valor total da matrícula.
 - O aluno deve ser notificado sobre a cobrança pendente.
+```
 
 ### Critérios de Aceite:
 #### Critério 1: Notificação automática  
