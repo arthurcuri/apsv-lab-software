@@ -1,24 +1,37 @@
 package APSV.LabProjSoftware.controllers;
 
-import APSV.LabProjSoftware.models.Disciplina;
-import APSV.LabProjSoftware.services.DisciplinaService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
-@RestController
-@RequestMapping("/disciplinas")
-public class DisciplinaController {
-    private final DisciplinaService disciplinaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-    public DisciplinaController(DisciplinaService disciplinaService) {
-        this.disciplinaService = disciplinaService;
-    }
+import APSV.LabProjSoftware.entities.Disciplina;
+import APSV.LabProjSoftware.services.DisciplinaService;
+
+@RestController
+@RequestMapping("/disciplina")
+public class DisciplinaController {
+
+    @Autowired
+    private DisciplinaService disciplinaService;
 
     @GetMapping
     public List<Disciplina> listarDisciplinas() {
         return disciplinaService.listarDisciplinas();
+    }
+
+    @GetMapping("/{id}")
+    public Disciplina getDisciplina(@PathVariable Long id) {
+        return disciplinaService.getDisciplina(id);
+    }
+
+    @GetMapping("/total-alunos")
+    public Integer totalAlunos(@RequestParam Long disciplinaId) {
+        return disciplinaService.totalAlunos(disciplinaId);
+    }
+
+    @PostMapping
+    public Disciplina cadastrarDisciplina(@RequestBody Disciplina disciplina) {
+        return disciplinaService.cadastrarDisciplina(disciplina);
     }
 }

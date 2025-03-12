@@ -1,20 +1,32 @@
 package APSV.LabProjSoftware.services;
 
-import APSV.LabProjSoftware.models.Disciplina;
-import APSV.LabProjSoftware.repositories.DisciplinaRepository;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import APSV.LabProjSoftware.entities.Disciplina;
+import APSV.LabProjSoftware.repositories.DisciplinaRepository;
 
 @Service
 public class DisciplinaService {
-    private final DisciplinaRepository disciplinaRepository;
 
-    public DisciplinaService(DisciplinaRepository disciplinaRepository) {
-        this.disciplinaRepository = disciplinaRepository;
-    }
+    @Autowired
+    private DisciplinaRepository disciplinaRepository;
 
     public List<Disciplina> listarDisciplinas() {
         return disciplinaRepository.findAll();
+    }
+
+    public Disciplina getDisciplina(Long id) {
+        return disciplinaRepository.findById(id).orElse(null);
+    }
+
+    public Integer totalAlunos(Long disciplinaId) {
+        return disciplinaRepository.findById(disciplinaId).get().getAlunos().size();
+    }
+
+    public Disciplina cadastrarDisciplina(Disciplina disciplina) {
+        return disciplinaRepository.save(disciplina);
     }
 }

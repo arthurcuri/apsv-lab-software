@@ -1,24 +1,43 @@
 package APSV.LabProjSoftware.controllers;
 
-import APSV.LabProjSoftware.models.Curso;
-import APSV.LabProjSoftware.services.CursoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import APSV.LabProjSoftware.entities.Curso;
+import APSV.LabProjSoftware.entities.Disciplina;
+import APSV.LabProjSoftware.services.CursoService;
+
 @RestController
-@RequestMapping("/cursos")
+@RequestMapping("/curso")
 public class CursoController {
-    private final CursoService cursoService;
 
-    public CursoController(CursoService cursoService) {
-        this.cursoService = cursoService;
-    }
+  @Autowired
+  private CursoService cursoService;
 
-    @GetMapping
-    public List<Curso> listarCursos() {
-        return cursoService.listarCursos();
-    }
+  @GetMapping
+  public List<Curso> listarCursos() {
+    return cursoService.listarCursos();
+  }
+
+  @GetMapping("/disciplinas")
+  public List<Disciplina> listarDisciplinas(@RequestParam Long cursoId) {
+    return cursoService.listarDisciplinas(cursoId);
+  }
+
+  @GetMapping("/{cursoId}/disciplinas")
+  public List<Disciplina> getDisciplinasByCursoId(@PathVariable Long cursoId) {
+    return cursoService.getDisciplinasByCursoId(cursoId);
+  }
+
+  @PostMapping
+  public Curso cadastrarCurso(@RequestBody Curso curso) {
+    return cursoService.cadastrarCurso(curso);
+  }
+
+  @PostMapping("/add-disciplina")
+  public Curso addDisciplina(@RequestParam Long cursoId, @RequestParam Long disciplinaId) {
+    return cursoService.addDisciplina(cursoId, disciplinaId);
+  }
 }
