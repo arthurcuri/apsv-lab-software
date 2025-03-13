@@ -99,8 +99,7 @@ public class Disciplina {
       Professor oldProfessor = this.professor;
       this.professor = null;
       oldProfessor.removeDisciplina(this);
-    }
-    else if (this.professor != professor) {
+    } else if (this.professor != professor) {
       if (this.professor != null) {
         this.professor.removeDisciplina(this);
       }

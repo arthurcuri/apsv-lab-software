@@ -6,19 +6,12 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 
 @Entity
 public class Aluno extends User {
 
   @ManyToMany
-  @JoinTable(
-    name = "matricula",  
-    joinColumns = @JoinColumn(name = "aluno_id"), 
-    inverseJoinColumns = @JoinColumn(name = "disciplina_id") 
-  )
   @JsonIgnore
   private List<Disciplina> disciplinas = new ArrayList<>();
 
