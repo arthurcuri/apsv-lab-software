@@ -1,6 +1,8 @@
 package APSV.LabProjSoftware.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 
 import APSV.LabProjSoftware.entities.Aluno;
@@ -8,17 +10,18 @@ import APSV.LabProjSoftware.entities.Aluno;
 @Service
 public class SistemaDePagamentoImpl implements SistemaDePagamento {
 
-  @Autowired
-  private EmailService emailService;
-
   @Override
-  public void enviarCobranca(Aluno aluno, double valor) {
-    System.out.println("boleto de R$" + valor + " enviado para o aluno: " + aluno.getNome());
+    public String enviarCobranca(Aluno aluno, double valor) {
+        return "Cobrança gerada para " + aluno.getNome() + ": R$" + valor;
+    }
 
-    String assunto = "Boleto de Matrícula";
-    String mensagem = "Olá " + aluno.getNome() + ", seu boleto de R$" + valor + " foi gerado!";
-    String emailAluno = aluno.getEmail();
-
-    emailService.enviarEmail(emailAluno, assunto, mensagem);
-  }
+    public List<String> gerarCobrancas(List<Aluno> alunos) {
+        return alunos.stream()
+            .filter(a -> a.consultarDisciplinas() != null && !a.consultarDisciplinas().isEmpty())
+            .map(aluno -> {
+                double valor = aluno.consultarDisciplinas().size() * 400;
+                return enviarCobranca(aluno, valor);
+            })
+            .collect(Collectors.toList());
+    }
 }

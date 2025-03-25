@@ -1,38 +1,32 @@
 package APSV.LabProjSoftware.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import APSV.LabProjSoftware.entities.Aluno;
 import APSV.LabProjSoftware.repositories.AlunoRepository;
 import APSV.LabProjSoftware.services.SistemaDePagamentoImpl;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/pagamento")
+@RequestMapping("/pagamentos")
 public class PagamentoController {
 
-  @Autowired
-  private AlunoRepository alunoRepository;
+    private final AlunoRepository alunoRepository;
+    private final SistemaDePagamentoImpl sistemaDePagamento;
 
-  @Autowired
-  private SistemaDePagamentoImpl sistemaDePagamento;
+    public PagamentoController(AlunoRepository alunoRepository, SistemaDePagamentoImpl sistemaDePagamento) {
+        this.alunoRepository = alunoRepository;
+        this.sistemaDePagamento = sistemaDePagamento;
+    }
 
-  @PostMapping("/realizar")
-  public String enviarCobranca() {
-    List<Aluno> alunos = alunoRepository.findAll();
+    @PostMapping("/realizar")
+    public ResponseEntity<List<String>> realizarCobranca() {
+        List<Aluno> alunos = alunoRepository.findAll();
+        List<String> cobrancas = sistemaDePagamento.gerarCobrancas(alunos);
 
-    alunos.stream()
-        .filter(a -> a.consultarDisciplinas() != null && !a.consultarDisciplinas().isEmpty())
-        .forEach(aluno -> {
-          int valor = aluno.consultarDisciplinas().size() * 400;
-          sistemaDePagamento.enviarCobranca(aluno, valor);
-        });
-
-    return "boletos enviados";
-  }
-
+        return cobrancas.isEmpty() 
+            ? ResponseEntity.noContent().build() 
+            : ResponseEntity.ok(cobrancas);
+    }
 }
