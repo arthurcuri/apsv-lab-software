@@ -1,11 +1,57 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Principal</title>
+  <meta charset="UTF-8" />
+  <title>Sistema de Moeda Estudantil</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 40px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .menu a {
+      display: block;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .menu a:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
     <h1>Sistema de Moeda Estudantil</h1>
+    <div class="menu">
+      <a href="/empresa/cadastro.html">Cadastrar Empresa Parceira</a>
+      <a href="/empresa/listagem.html">Listar Empresas Parceiras</a>
+      <a href="/aluno/cadastro.html">Cadastrar Aluno</a>
+      <a href="/aluno/listagem.html">Listar Alunos</a>
+    </div>
+  </div>
 </body>
 </html>

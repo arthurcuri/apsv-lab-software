@@ -37,7 +37,7 @@ public class Aluno {
     @Column(name = "endereco", nullable = false)
     private String endereco;
 
-    @Column(name = "instituicaoEnsino", nullable = false)
+    @Column(name = "instituicao_ensino", nullable = false)
     private String instituicaoEnsino;
 
     @Column(name = "curso", nullable = false)

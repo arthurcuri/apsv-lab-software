@@ -33,5 +33,8 @@ public class EmpresaParceira {
 
     @Column(name = "cnpj", nullable = false)
     private String cnpj;
+
+    @Column(name = "telefone", nullable = false)
+    private String telefone;
     
 }

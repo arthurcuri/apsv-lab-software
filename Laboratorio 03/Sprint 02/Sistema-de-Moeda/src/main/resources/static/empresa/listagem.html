@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Empresas Parceiras</title>
+  <link rel="stylesheet" href="empresa.css" />
+</head>
+<body>
+  <nav>
+    <a href="/empresa/cadastro.html">Cadastrar Empresa</a>
+    <a href="/empresa/listagem.html">Listar Empresas</a>
+    <a href="/aluno/cadastro.html">Cadastrar Aluno</a>
+    <a href="/aluno/listagem.html">Listar Alunos</a>
+  </nav>
+
+  <div class="form-container">
+    <h2>Empresas Parceiras Cadastradas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>CNPJ</th>
+          <th>Email</th>
+          <th>Telefone</th>
+        </tr>
+      </thead>
+      <tbody id="empresa-lista"></tbody>
+    </table>
+  </div>
+</body>
+<script>
+  fetch("http://localhost:8080/empresas")
+    .then(res => res.json())
+    .then(data => {
+      const tabela = document.getElementById("empresa-lista");
+      data.forEach(empresa => {
+        const row = `<tr>
+          <td>${empresa.nome}</td>
+          <td>${empresa.cnpj}</td>
+          <td>${empresa.email}</td>
+          <td>${empresa.telefone}</td>
+        </tr>`;
+        tabela.innerHTML += row;
+      });
+    });
+</script>
+</html>
