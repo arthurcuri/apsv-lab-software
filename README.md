@@ -1,4 +1,5 @@
 # Laboratório de Desenvolvimento de Software
+
 ## Alunos integrantes da equipe
 
 * Arthur Curi Kramberger
