@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cadastro de Aluno</title>
+  <link rel="stylesheet" href="aluno.css" />
+</head>
+<body>
+  <nav>
+    <a href="/empresa/cadastro.html">Cadastrar Empresa</a>
+    <a href="/empresa/listagem.html">Listar Empresas</a>
+    <a href="/aluno/cadastro.html">Cadastrar Aluno</a>
+    <a href="/aluno/listagem.html">Listar Alunos</a>
+  </nav>
+
+  <div class="form-container">
+    <h2>Cadastro de Aluno</h2>
+    <form id="alunoForm">
+      <input type="text" name="nome" placeholder="Nome" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="text" name="cpf" placeholder="CPF" required />
+      <input type="text" name="rg" placeholder="RG" required />
+      <input type="text" name="endereco" placeholder="Endereço" required />
+      <input type="text" name="curso" placeholder="Curso" required />
+      <select name="instituicaoEnsino" required>
+        <option value="">Selecione a instituição</option>
+        <option value="PUC Minas">PUC Minas</option>
+        <option value="UFMG">UFMG</option>
+      </select>
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>
+</body>
+<script>
+  const form = document.getElementById('alunoForm');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    const response = await fetch('http://localhost:8080/alunos', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+
+    if (response.ok) {
+      alert('Aluno cadastrado com sucesso!');
+      form.reset();
+    } else {
+      alert('Erro ao cadastrar aluno.');
+    }
+  });
+</script>
+</html>
