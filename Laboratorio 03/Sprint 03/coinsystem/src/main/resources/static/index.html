@@ -5,21 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Coin System</title>
   <style>
-    body { font-family: Arial, sans-serif; margin:0; padding:0 }
-    nav { background:#333; color:#fff; padding:10px }
-    nav ul { list-style:none; margin:0; padding:0; display:flex }
-    nav li { margin-right:15px; cursor:pointer }
-    .container { padding:20px }
-    section { display:none }
-    section.active { display:block }
-    form { max-width:400px; margin-bottom:20px }
-    form div { margin-bottom:10px }
-    label { display:block; margin-bottom:5px }
-    input, button { width:100%; padding:8px; box-sizing:border-box }
-    .message { margin-top:10px; color:green }
-    .error { color:red }
-    table { width:100%; border-collapse:collapse; margin-top:10px }
-    th,td { border:1px solid #ccc; padding:8px; text-align:left }
+    body { font-family: Arial, sans-serif; margin:0; padding:0; }
+    nav { background:#333; color:#fff; padding:10px; }
+    nav ul { list-style:none; margin:0; padding:0; display:flex; }
+    nav li { margin-right:15px; cursor:pointer; }
+    nav li.hidden { display:none; }
+    .container { padding:20px; }
+    section { display:none; }
+    section.active { display:block; }
+    form { max-width:400px; margin-bottom:20px; }
+    form div { margin-bottom:10px; }
+    label { display:block; margin-bottom:5px; }
+    input, button { width:100%; padding:8px; box-sizing:border-box; }
+    .message { margin-top:10px; color:green; }
+    .error { color:red; }
+    table { width:100%; border-collapse:collapse; margin-top:10px; }
+    th, td { border:1px solid #ccc; padding:8px; text-align:left; }
+    .perfil { margin-bottom:20px; padding:10px; border:1px solid #ccc; }
   </style>
 </head>
 <body>
@@ -29,13 +31,15 @@
       <li data-section="cadastrar-aluno">Cadastrar Aluno</li>
       <li data-section="cadastrar-professor">Cadastrar Professor</li>
       <li data-section="cadastrar-empresa">Cadastrar Empresa</li>
-      <li data-section="dashboard-aluno">Dashboard Aluno</li>
-      <li data-section="dashboard-professor">Dashboard Professor</li>
-      <li data-section="dashboard-empresa">Dashboard Empresa</li>
+      <li data-section="dashboard-aluno" class="hidden">Dashboard Aluno</li>
+      <li data-section="dashboard-professor" class="hidden">Dashboard Professor</li>
+      <li data-section="dashboard-empresa" class="hidden">Dashboard Empresa</li>
+      <li data-action="logout" class="hidden">Logout</li>
     </ul>
   </nav>
 
   <div class="container">
+    <!-- Login -->
     <section id="login" class="active">
       <h2>Login</h2>
       <form id="login-form">
@@ -46,6 +50,7 @@
       </form>
     </section>
 
+    <!-- Cadastrar Aluno -->
     <section id="cadastrar-aluno">
       <h2>Cadastrar Aluno</h2>
       <form id="aluno-form">
@@ -61,6 +66,7 @@
       </form>
     </section>
 
+    <!-- Cadastrar Professor -->
     <section id="cadastrar-professor">
       <h2>Cadastrar Professor</h2>
       <form id="professor-form">
@@ -74,6 +80,7 @@
       </form>
     </section>
 
+    <!-- Cadastrar Empresa -->
     <section id="cadastrar-empresa">
       <h2>Cadastrar Empresa</h2>
       <form id="empresa-form">
@@ -86,17 +93,17 @@
       </form>
     </section>
 
+    <!-- Dashboard Aluno -->
     <section id="dashboard-aluno">
+      <div id="perfil-aluno" class="perfil"></div>
       <h2>Resgatar Vantagem</h2>
       <form id="resgatar-form">
-        <div><label>ID Aluno</label><input type="number" id="resgatar-aluno-id" required></div>
         <div><label>ID Vantagem</label><input type="number" id="resgatar-vant-id" required></div>
         <button type="submit">Resgatar</button>
         <div id="resgatar-msg" class="message"></div>
       </form>
       <h2>Extrato de Transações</h2>
       <form id="extrato-form">
-        <div><label>ID Aluno</label><input type="number" id="extrato-aluno-id" required></div>
         <div><label>Data Início</label><input type="date" id="extrato-inicio" required></div>
         <div><label>Data Fim</label><input type="date" id="extrato-fim" required></div>
         <button type="submit">Buscar Extrato</button>
@@ -104,28 +111,24 @@
       <div id="extrato-result"></div>
     </section>
 
+    <!-- Dashboard Professor -->
     <section id="dashboard-professor">
+      <div id="perfil-professor" class="perfil"></div>
       <h2>Distribuir Moedas</h2>
       <form id="distrib-form">
-        <div><label>ID Professor</label><input type="number" id="dist-prof-id" required></div>
         <div><label>ID Aluno</label><input type="number" id="dist-aluno-id" required></div>
         <div><label>Quantidade</label><input type="number" id="dist-quantidade" required></div>
         <div><label>Mensagem</label><input type="text" id="dist-msg" required></div>
         <button type="submit">Distribuir</button>
         <div id="dist-msg-res" class="message"></div>
       </form>
-      <h2>Consultar Saldo</h2>
-      <form id="saldo-form">
-        <div><label>ID Professor</label><input type="number" id="saldo-prof-id" required></div>
-        <button type="submit">Consultar Saldo</button>
-      </form>
-      <div id="saldo-result"></div>
     </section>
 
+    <!-- Dashboard Empresa -->
     <section id="dashboard-empresa">
+      <div id="perfil-empresa" class="perfil"></div>
       <h2>Cadastrar Vantagem</h2>
       <form id="vantagem-form">
-        <div><label>ID Empresa</label><input type="number" id="vant-emp-id" required></div>
         <div><label>Nome</label><input type="text" id="vant-nome" required></div>
         <div><label>Descrição</label><input type="text" id="vant-desc" required></div>
         <div><label>URL Imagem</label><input type="text" id="vant-img" required></div>
@@ -137,189 +140,226 @@
   </div>
 
   <script>
-    document.querySelectorAll('nav li').forEach(li =>
-      li.addEventListener('click', () => {
-        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
-        document.getElementById(li.dataset.section).classList.add('active');
-      })
-    );
+    let currentUser = null;
 
-    async function request(url, options={}) {
-      const res = await fetch(url, options);
+    const sections = document.querySelectorAll('section');
+    const navItems = document.querySelectorAll('nav li');
+
+    function showSection(id) {
+      sections.forEach(s => s.id === id
+        ? s.classList.add('active')
+        : s.classList.remove('active')
+      );
+    }
+
+    function updateNav() {
+      navItems.forEach(li => {
+        const sec = li.dataset.section;
+        if (!currentUser) {
+          // antes de login
+          if (sec === 'login' || sec.startsWith('cadastrar-')) {
+            li.classList.remove('hidden');
+          } else {
+            li.classList.add('hidden');
+          }
+          if (li.dataset.action === 'logout') li.classList.add('hidden');
+        } else {
+          // após login
+          if (li.dataset.action === 'logout' ||
+              li.dataset.section === `dashboard-${currentUser.tipo}`) {
+            li.classList.remove('hidden');
+          } else {
+            li.classList.add('hidden');
+          }
+        }
+      });
+    }
+
+    navItems.forEach(li => {
+      if (li.dataset.section) {
+        li.addEventListener('click', () => showSection(li.dataset.section));
+      } else if (li.dataset.action === 'logout') {
+        li.addEventListener('click', () => {
+          currentUser = null;
+          updateNav();
+          showSection('login');
+        });
+      }
+    });
+
+    async function request(url, opts={}) {
+      const res = await fetch(url, opts);
       if (!res.ok) throw new Error(await res.text());
-      return res.status!==204 ? res.json() : null;
+      return res.status !== 204 ? await res.json() : null;
     }
 
     // Login
-    document.getElementById('login-form').addEventListener('submit', async e=>{
+    document.getElementById('login-form').addEventListener('submit', async e => {
       e.preventDefault();
       const form = new URLSearchParams();
-      form.append('email',document.getElementById('login-email').value);
-      form.append('senha',document.getElementById('login-senha').value);
-      try{
-        const user = await request('/api/auth/login',{
-          method:'POST',
-          headers:{'Content-Type':'application/x-www-form-urlencoded'},
-          body:form.toString()
+      form.append('email', document.getElementById('login-email').value);
+      form.append('senha', document.getElementById('login-senha').value);
+      try {
+        const user = await request('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: form.toString()
         });
-        document.getElementById('login-msg').textContent=`Bem-vindo, ${user.nome}`;
-      }catch(err){
-        document.getElementById('login-msg').textContent=err.message;
+        // definir tipo
+        if ('curso' in user) user.tipo = 'aluno';
+        else if ('departamento' in user) user.tipo = 'professor';
+        else if ('cnpj' in user) user.tipo = 'empresa';
+        currentUser = user;
+        // preencher perfil
+        document.getElementById(`perfil-${user.tipo}`).textContent =
+          `Nome: ${user.nome} | Email: ${user.email} | Moedas: ${user.moedas}`;
+        updateNav();
+        showSection(`dashboard-${user.tipo}`);
+      } catch (err) {
+        document.getElementById('login-msg').textContent = err.message;
         document.getElementById('login-msg').classList.add('error');
       }
     });
 
-    // Cadastrar Aluno
-    document.getElementById('aluno-form').addEventListener('submit', async e=>{
+    // Cadastro Aluno
+    document.getElementById('aluno-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const data={
-        nome:document.getElementById('aluno-nome').value,
-        email:document.getElementById('aluno-email').value,
-        senha:document.getElementById('aluno-senha').value,
-        cpf:document.getElementById('aluno-cpf').value,
-        endereco:document.getElementById('aluno-endereco').value,
-        instituicaoEnsino:document.getElementById('aluno-instituicao').value,
-        curso:document.getElementById('aluno-curso').value
+      const data = {
+        nome: document.getElementById('aluno-nome').value,
+        email: document.getElementById('aluno-email').value,
+        senha: document.getElementById('aluno-senha').value,
+        cpf: document.getElementById('aluno-cpf').value,
+        endereco: document.getElementById('aluno-endereco').value,
+        instituicaoEnsino: document.getElementById('aluno-instituicao').value,
+        curso: document.getElementById('aluno-curso').value
       };
-      try{
-        await request('/api/alunos',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(data)
+      try {
+        await request('/api/alunos', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
         });
-        document.getElementById('aluno-msg').textContent='Aluno cadastrado!';
-      }catch(err){
-        document.getElementById('aluno-msg').textContent=err.message;
+        document.getElementById('aluno-msg').textContent = 'Aluno cadastrado!';
+      } catch (err) {
+        document.getElementById('aluno-msg').textContent = err.message;
         document.getElementById('aluno-msg').classList.add('error');
       }
     });
 
-    // Cadastrar Professor
-    document.getElementById('professor-form').addEventListener('submit', async e=>{
+    // Cadastro Professor
+    document.getElementById('professor-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const data={
-        nome:document.getElementById('prof-nome').value,
-        email:document.getElementById('prof-email').value,
-        senha:document.getElementById('prof-senha').value,
-        cpf:document.getElementById('prof-cpf').value,
-        departamento:document.getElementById('prof-depto').value
+      const data = {
+        nome: document.getElementById('prof-nome').value,
+        email: document.getElementById('prof-email').value,
+        senha: document.getElementById('prof-senha').value,
+        cpf: document.getElementById('prof-cpf').value,
+        departamento: document.getElementById('prof-depto').value
       };
-      try{
-        await request('/api/professores',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(data)
+      try {
+        await request('/api/professores', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
         });
-        document.getElementById('prof-msg').textContent='Professor cadastrado!';
-      }catch(err){
-        document.getElementById('prof-msg').textContent=err.message;
+        document.getElementById('prof-msg').textContent = 'Professor cadastrado!';
+      } catch (err) {
+        document.getElementById('prof-msg').textContent = err.message;
         document.getElementById('prof-msg').classList.add('error');
       }
     });
 
-    // Cadastrar Empresa
-    document.getElementById('empresa-form').addEventListener('submit', async e=>{
+    // Cadastro Empresa
+    document.getElementById('empresa-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const data={
-        nome:document.getElementById('emp-nome').value,
-        email:document.getElementById('emp-email').value,
-        senha:document.getElementById('emp-senha').value,
-        cnpj:document.getElementById('emp-cnpj').value
+      const data = {
+        nome: document.getElementById('emp-nome').value,
+        email: document.getElementById('emp-email').value,
+        senha: document.getElementById('emp-senha').value,
+        cnpj: document.getElementById('emp-cnpj').value
       };
-      try{
-        await request('/api/empresas',{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(data)
+      try {
+        await request('/api/empresas', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
         });
-        document.getElementById('emp-msg').textContent='Empresa cadastrada!';
-      }catch(err){
-        document.getElementById('emp-msg').textContent=err.message;
+        document.getElementById('emp-msg').textContent = 'Empresa cadastrada!';
+      } catch (err) {
+        document.getElementById('emp-msg').textContent = err.message;
         document.getElementById('emp-msg').classList.add('error');
       }
     });
 
-    // Resgatar Vantagem
-    document.getElementById('resgatar-form').addEventListener('submit', async e=>{
+    // Resgatar Vantagem (Aluno)
+    document.getElementById('resgatar-form').addEventListener('submit', async e => {
       e.preventDefault();
-      try{
+      try {
         await request(
-          `/api/alunos/${document.getElementById('resgatar-aluno-id').value}/resgatar/${document.getElementById('resgatar-vant-id').value}`,
+          `/api/alunos/${currentUser.id}/resgatar/${document.getElementById('resgatar-vant-id').value}`,
           {method:'POST'}
         );
-        document.getElementById('resgatar-msg').textContent='Resgatado!';
-      }catch(err){
-        document.getElementById('resgatar-msg').textContent=err.message;
+        document.getElementById('resgatar-msg').textContent = 'Vantagem resgatada!';
+      } catch (err) {
+        document.getElementById('resgatar-msg').textContent = err.message;
         document.getElementById('resgatar-msg').classList.add('error');
       }
     });
 
-    // Extrato
-    document.getElementById('extrato-form').addEventListener('submit', async e=>{
+    // Extrato (Aluno)
+    document.getElementById('extrato-form').addEventListener('submit', async e => {
       e.preventDefault();
-      try{
+      try {
         const ext = await request(
-          `/api/alunos/${document.getElementById('extrato-aluno-id').value}/extrato?inicio=${document.getElementById('extrato-inicio').value}&fim=${document.getElementById('extrato-fim').value}`
+          `/api/alunos/${currentUser.id}/extrato?inicio=${document.getElementById('extrato-inicio').value}&fim=${document.getElementById('extrato-fim').value}`
         );
-        let html='<table><thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody>';
-        ext.transacoes.forEach(tx=>{
-          html+=`<tr><td>${new Date(tx.data).toLocaleString()}</td><td>${tx.tipo}</td><td>${tx.descricao}</td><td>${tx.quantidade}</td></tr>`;
+        let html = '<table><thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody>';
+        ext.transacoes.forEach(tx => {
+          html += `<tr><td>${new Date(tx.data).toLocaleString()}</td><td>${tx.tipo}</td><td>${tx.descricao}</td><td>${tx.quantidade}</td></tr>`;
         });
-        html+='</tbody></table>';
-        document.getElementById('extrato-result').innerHTML=html;
-      }catch(err){
-        document.getElementById('extrato-result').textContent=err.message;
+        html += '</tbody></table>';
+        document.getElementById('extrato-result').innerHTML = html;
+      } catch (err) {
+        document.getElementById('extrato-result').textContent = err.message;
         document.getElementById('extrato-result').classList.add('error');
       }
     });
 
-    // Distribuir Moedas
-    document.getElementById('distrib-form').addEventListener('submit', async e=>{
+    // Distribuir Moedas (Professor)
+    document.getElementById('distrib-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const pid=document.getElementById('dist-prof-id').value;
-      const aid=document.getElementById('dist-aluno-id').value;
-      const q=document.getElementById('dist-quantidade').value;
-      const msg=encodeURIComponent(document.getElementById('dist-msg').value);
-      try{
-        await request(`/api/professores/${pid}/distribuir?alunoId=${aid}&quantidade=${q}&mensagem=${msg}`,{method:'POST'});
-        document.getElementById('dist-msg-res').textContent='Moedas distribuídas!';
-      }catch(err){
-        document.getElementById('dist-msg-res').textContent=err.message;
+      const alunoId = document.getElementById('dist-aluno-id').value;
+      const quantidade = document.getElementById('dist-quantidade').value;
+      const mensagem = encodeURIComponent(document.getElementById('dist-msg').value);
+      try {
+        await request(
+          `/api/professores/${currentUser.id}/distribuir?alunoId=${alunoId}&quantidade=${quantidade}&mensagem=${mensagem}`,
+          {method:'POST'}
+        );
+        document.getElementById('dist-msg-res').textContent = 'Moedas distribuídas!';
+      } catch (err) {
+        document.getElementById('dist-msg-res').textContent = err.message;
         document.getElementById('dist-msg-res').classList.add('error');
       }
     });
 
-    // Saldo Professor
-    document.getElementById('saldo-form').addEventListener('submit', async e=>{
+    // Cadastrar Vantagem (Empresa)
+    document.getElementById('vantagem-form').addEventListener('submit', async e => {
       e.preventDefault();
-      try{
-        const s=await request(`/api/professores/${document.getElementById('saldo-prof-id').value}/saldo`);
-        document.getElementById('saldo-result').textContent=`Saldo: ${s}`;
-      }catch(err){
-        document.getElementById('saldo-result').textContent=err.message;
-        document.getElementById('saldo-result').classList.add('error');
-      }
-    });
-
-    // Cadastrar Vantagem Empresa
-    document.getElementById('vantagem-form').addEventListener('submit', async e=>{
-      e.preventDefault();
-      const eid=document.getElementById('vant-emp-id').value;
-      const data={
-        nome:document.getElementById('vant-nome').value,
-        descricao:document.getElementById('vant-desc').value,
-        imagemUrl:document.getElementById('vant-img').value,
-        custo:parseInt(document.getElementById('vant-custo').value,10)
+      const data = {
+        nome: document.getElementById('vant-nome').value,
+        descricao: document.getElementById('vant-desc').value,
+        imagemUrl: document.getElementById('vant-img').value,
+        custo: parseInt(document.getElementById('vant-custo').value, 10)
       };
-      try{
-        await request(`/api/empresas/${eid}/vantagens`,{
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body:JSON.stringify(data)
-        });
-        document.getElementById('vant-msg').textContent='Vantagem cadastrada!';
-      }catch(err){
-        document.getElementById('vant-msg').textContent=err.message;
+      try {
+        await request(
+          `/api/empresas/${currentUser.id}/vantagens`,
+          {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}
+        );
+        document.getElementById('vant-msg').textContent = 'Vantagem cadastrada!';
+      } catch (err) {
+        document.getElementById('vant-msg').textContent = err.message;
         document.getElementById('vant-msg').classList.add('error');
       }
     });
