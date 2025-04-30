@@ -1,6 +1,5 @@
 package com.coinsystem.coinsystem.services;
 
-
 import org.springframework.stereotype.Service;
 
 import com.coinsystem.coinsystem.models.EmpresaParceira;

@@ -1,5 +1,4 @@
 package com.coinsystem.coinsystem.services;
-// src/main/java/com/example/coinsystem/service/ProfessorService.java
 
 import java.time.LocalDateTime;
 
@@ -8,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.coinsystem.coinsystem.models.Aluno;
 import com.coinsystem.coinsystem.models.Professor;
-import com.coinsystem.coinsystem.models.Transacao;
+import com.coinsystem.coinsystem.models.Transacao   ;
 import com.coinsystem.coinsystem.repositories.AlunoRepository;
 import com.coinsystem.coinsystem.repositories.ProfessorRepository;
 import com.coinsystem.coinsystem.repositories.TransacaoRepository;

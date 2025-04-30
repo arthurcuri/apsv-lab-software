@@ -2,7 +2,6 @@ package com.coinsystem.coinsystem.models;
 
 import jakarta.persistence.Entity;
 
-// Aluno.java
 @Entity
 public class Aluno extends Usuario {
 

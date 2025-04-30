@@ -2,7 +2,6 @@ package com.coinsystem.coinsystem.models;
 
 import jakarta.persistence.Entity;
 
-// EmpresaParceira.java
 @Entity
 public class EmpresaParceira extends Usuario {
 

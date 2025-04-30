@@ -8,14 +8,12 @@ public class Extrato {
     private LocalDate dataInicio;
     private LocalDate dataFinal;
 
-    // Construtor que faltava
     public Extrato(List<Transacao> transacoes, LocalDate dataInicio, LocalDate dataFinal) {
         this.transacoes = transacoes;
         this.dataInicio = dataInicio;
         this.dataFinal = dataFinal;
     }
 
-    // getters e setters
     public List<Transacao> getTransacoes() {
         return transacoes;
     }

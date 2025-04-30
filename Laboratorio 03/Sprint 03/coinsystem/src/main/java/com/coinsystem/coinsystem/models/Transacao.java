@@ -18,9 +18,8 @@ public class Transacao {
     private LocalDateTime data;
     private int quantidade;
 
-    // NOVOS CAMPOS
-    private String tipo;        // ex: "DISTRIBUICAO" ou "RESGATE"
-    private String descricao;   // mensagem ou nome da vantagem
+    private String tipo;        
+    private String descricao;  
 
     @ManyToOne
     private Usuario origem;
@@ -30,7 +29,6 @@ public class Transacao {
 
     public Transacao() { }
 
-    // construtor opcional incluindo origem/destino
     public Transacao(LocalDateTime data, int quantidade, String tipo,
                      String descricao, Usuario origem, Usuario destino) {
         this.data = data;
@@ -42,7 +40,6 @@ public class Transacao {
     }
 
 
-    // getters e setters existentes...
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -52,7 +49,6 @@ public class Transacao {
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
 
-    // GETTERS E SETTERS QUE FALTAVAM
     public String getTipo() { 
         return tipo; 
     }
