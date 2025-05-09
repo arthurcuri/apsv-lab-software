@@ -5,206 +5,64 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Coin System</title>
   <style>
-  /* 1. RESET E GLOBAIS */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 100%; scroll-behavior: smooth; }
+    body { font-family: Arial, sans-serif; line-height: 1.5; color: #333; background-color: #f9f9f9; }
 
-html {
-  font-size: 100%; /* 16px */
-  scroll-behavior: smooth;
-}
+    :root {
+      --cor-primaria: #333;
+      --cor-secundaria: #6200ee;
+      --cor-fundo: #fff;
+      --cor-sucesso: #2e7d32;
+      --cor-erro: #c62828;
+      --sombra-leve: rgba(0,0,0,0.1);
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.5;
-  color: #333;
-  background-color: #f9f9f9;
-}
+    nav { background-color: var(--cor-primaria); color: #fff; padding: .75rem 1.5rem; }
+    nav ul { list-style: none; display: flex; gap: 1rem; }
+    nav li { cursor: pointer; padding: .5rem; transition: background-color .2s; }
+    nav li:hover { background-color: #444; }
+    nav li.hidden { display: none; }
 
-/* Variáveis de cor */
-:root {
-  --cor-primaria: #333;
-  --cor-secundaria: #6200ee;
-  --cor-fundo: #fff;
-  --cor-sucesso: #2e7d32;
-  --cor-erro: #c62828;
-  --sombra-leve: rgba(0, 0, 0, 0.1);
-}
+    .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; background-color: var(--cor-fundo); box-shadow: 0 2px 4px var(--sombra-leve); border-radius: .25rem; }
+    section { display: none; margin-top: 1.5rem; }
+    section.active { display: block; }
 
-/* 2. NAVEGAÇÃO */
-nav {
-  background-color: var(--cor-primaria);
-  color: #fff;
-  padding: 0.75rem 1.5rem;
-}
+    h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--cor-primaria); }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
+    form { background-color: #fafafa; padding: 1rem; border-radius: .25rem; box-shadow: inset 0 1px 2px var(--sombra-leve); margin-bottom: 2rem; }
+    form div { margin-bottom: 1rem; }
+    label { display: block; margin-bottom: .25rem; font-weight: bold; }
+    input, select { width: 100%; padding: .5rem; border: 1px solid #ccc; border-radius: .25rem; transition: border-color .2s, box-shadow .2s; }
+    input:focus, select:focus { border-color: var(--cor-secundaria); box-shadow: 0 0 0 2px rgba(98,0,238,.2); outline: none; }
 
-nav li {
-  cursor: pointer;
-  position: relative;
-  padding: 0.5rem;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
+    button { padding: .6rem 1.2rem; border: none; border-radius: .25rem; font-size: 1rem; cursor: pointer; transition: background-color .2s; }
+    button[type="submit"] { background-color: var(--cor-secundaria); color: #fff; }
+    button[type="submit"]:hover { background-color: #4a00b5; }
 
-nav li:hover {
-  background-color: #444;
-}
+    .perfil { background-color: #fff; padding: 1rem; border: 1px solid #ddd; border-radius: .25rem; box-shadow: inset 0 1px 2px var(--sombra-leve); margin-bottom: 1.5rem; }
 
-nav li.hidden {
-  display: none;
-}
+    .message { margin-top: .5rem; font-size: .95rem; }
+    .message.error { color: var(--cor-erro); }
+    .message:not(.error) { color: var(--cor-sucesso); }
 
-/* 3. CONTAINER E SEÇÕES */
-.container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-  background-color: var(--cor-fundo);
-  box-shadow: 0 2px 4px var(--sombra-leve);
-  border-radius: 0.25rem;
-}
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 1rem; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: .25rem; box-shadow: 0 1px 3px var(--sombra-leve); overflow: hidden; display: flex; flex-direction: column; }
+    .card img { width: 100%; height: 150px; object-fit: cover; }
+    .card-content { padding: .75rem; flex: 1; display: flex; flex-direction: column; }
+    .card-content h3 { margin-bottom: .5rem; font-size: 1.1rem; }
+    .card-content p { margin-bottom: .5rem; font-size: .95rem; }
 
-section {
-  display: none;
-  margin-top: 1.5rem;
-}
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: .75rem; border: 1px solid #ddd; }
+    tbody tr:nth-child(even) { background-color: #f5f5f5; }
 
-section.active {
-  display: block;
-}
-
-/* 4. TÍTULOS */
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  color: var(--cor-primaria);
-}
-
-/* 5. FORMULÁRIOS E CAMPOS */
-form {
-  background-color: #fafafa;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 1px 2px var(--sombra-leve);
-  margin-bottom: 2rem;
-}
-
-form div {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.25rem;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="number"] {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 0.25rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-input:focus {
-  border-color: var(--cor-secundaria);
-  box-shadow: 0 0 0 2px rgba(98, 0, 238, 0.2);
-  outline: none;
-}
-
-/* 6. BOTÕES */
-button {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-button[type="submit"] {
-  background-color: var(--cor-secundaria);
-  color: #fff;
-}
-
-button[type="submit"]:hover {
-  background-color: #4a00b5;
-}
-
-/* 7. TABELAS E PERFIS */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-}
-
-th,
-td {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-}
-
-tbody tr:nth-child(even) {
-  background-color: #f5f5f5;
-}
-
-.perfil {
-  background-color: #fff;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 0.25rem;
-  box-shadow: inset 0 1px 2px var(--sombra-leve);
-  margin-bottom: 1.5rem;
-}
-
-/* 8. MENSAGENS DE SUCESSO E ERRO */
-.message {
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
-}
-
-.message.error {
-  color: var(--cor-erro);
-}
-
-.message:not(.error) {
-  color: var(--cor-sucesso);
-}
-
-/* 9. RESPONSIVIDADE */
-@media (max-width: 600px) {
-  nav ul {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .container {
-    margin: 1rem;
-    padding: 0.5rem;
-  }
-  h2 {
-    font-size: 1.25rem;
-  }
-  button {
-    width: 100%;
-  }
-}
-
+    @media (max-width:600px) {
+      nav ul { flex-direction: column; gap: .5rem; }
+      .container { margin: 1rem; padding: .5rem; }
+      h2 { font-size: 1.25rem; }
+      button { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -222,7 +80,6 @@ tbody tr:nth-child(even) {
   </nav>
 
   <div class="container">
-    <!-- Login -->
     <section id="login" class="active">
       <h2>Login</h2>
       <form id="login-form">
@@ -233,7 +90,6 @@ tbody tr:nth-child(even) {
       </form>
     </section>
 
-    <!-- Cadastrar Aluno -->
     <section id="cadastrar-aluno">
       <h2>Cadastrar Aluno</h2>
       <form id="aluno-form">
@@ -249,7 +105,6 @@ tbody tr:nth-child(even) {
       </form>
     </section>
 
-    <!-- Cadastrar Professor -->
     <section id="cadastrar-professor">
       <h2>Cadastrar Professor</h2>
       <form id="professor-form">
@@ -263,7 +118,6 @@ tbody tr:nth-child(even) {
       </form>
     </section>
 
-    <!-- Cadastrar Empresa -->
     <section id="cadastrar-empresa">
       <h2>Cadastrar Empresa</h2>
       <form id="empresa-form">
@@ -276,15 +130,12 @@ tbody tr:nth-child(even) {
       </form>
     </section>
 
-    <!-- Dashboard Aluno -->
     <section id="dashboard-aluno">
       <div id="perfil-aluno" class="perfil"></div>
-      <h2>Resgatar Vantagem</h2>
-      <form id="resgatar-form">
-        <div><label>ID Vantagem</label><input type="number" id="resgatar-vant-id" required></div>
-        <button type="submit">Resgatar</button>
-        <div id="resgatar-msg" class="message"></div>
-      </form>
+      <h2>Selecione sua Vantagem</h2>
+      <div id="cards-container" class="cards-grid"></div>
+      <div id="resgatar-msg" class="message"></div>
+
       <h2>Extrato de Transações</h2>
       <form id="extrato-form">
         <div><label>Data Início</label><input type="date" id="extrato-inicio" required></div>
@@ -294,12 +145,14 @@ tbody tr:nth-child(even) {
       <div id="extrato-result"></div>
     </section>
 
-    <!-- Dashboard Professor -->
     <section id="dashboard-professor">
       <div id="perfil-professor" class="perfil"></div>
       <h2>Distribuir Moedas</h2>
       <form id="distrib-form">
-        <div><label>ID Aluno</label><input type="number" id="dist-aluno-id" required></div>
+        <div>
+          <label>Aluno</label>
+          <select id="dist-aluno" required></select>
+        </div>
         <div><label>Quantidade</label><input type="number" id="dist-quantidade" required></div>
         <div><label>Mensagem</label><input type="text" id="dist-msg" required></div>
         <button type="submit">Distribuir</button>
@@ -307,14 +160,13 @@ tbody tr:nth-child(even) {
       </form>
     </section>
 
-    <!-- Dashboard Empresa -->
     <section id="dashboard-empresa">
       <div id="perfil-empresa" class="perfil"></div>
       <h2>Cadastrar Vantagem</h2>
       <form id="vantagem-form">
         <div><label>Nome</label><input type="text" id="vant-nome" required></div>
         <div><label>Descrição</label><input type="text" id="vant-desc" required></div>
-        <div><label>URL Imagem</label><input type="text" id="vant-img" required></div>
+        <div><label>URL da Imagem</label><input type="text" id="vant-img" required></div>
         <div><label>Custo</label><input type="number" id="vant-custo" required></div>
         <button type="submit">Cadastrar Vantagem</button>
         <div id="vant-msg" class="message"></div>
@@ -324,51 +176,30 @@ tbody tr:nth-child(even) {
 
   <script>
     let currentUser = null;
-
     const sections = document.querySelectorAll('section');
     const navItems = document.querySelectorAll('nav li');
 
     function showSection(id) {
       sections.forEach(s => s.id === id
         ? s.classList.add('active')
-        : s.classList.remove('active')
-      );
+        : s.classList.remove('active'));
     }
 
     function updateNav() {
       navItems.forEach(li => {
         const sec = li.dataset.section;
         if (!currentUser) {
-          // antes de login
-          if (sec === 'login' || sec.startsWith('cadastrar-')) {
-            li.classList.remove('hidden');
-          } else {
-            li.classList.add('hidden');
-          }
+          if (sec === 'login' || sec.startsWith('cadastrar-')) li.classList.remove('hidden');
+          else li.classList.add('hidden');
           if (li.dataset.action === 'logout') li.classList.add('hidden');
         } else {
-          // após login
-          if (li.dataset.action === 'logout' ||
-              li.dataset.section === `dashboard-${currentUser.tipo}`) {
+          if (li.dataset.action === 'logout' || li.dataset.section === `dashboard-${currentUser.tipo}`)
             li.classList.remove('hidden');
-          } else {
+          else
             li.classList.add('hidden');
-          }
         }
       });
     }
-
-    navItems.forEach(li => {
-      if (li.dataset.section) {
-        li.addEventListener('click', () => showSection(li.dataset.section));
-      } else if (li.dataset.action === 'logout') {
-        li.addEventListener('click', () => {
-          currentUser = null;
-          updateNav();
-          showSection('login');
-        });
-      }
-    });
 
     async function request(url, opts={}) {
       const res = await fetch(url, opts);
@@ -376,35 +207,102 @@ tbody tr:nth-child(even) {
       return res.status !== 204 ? await res.json() : null;
     }
 
-    // Login
+    async function carregarAlunos() {
+      const sel = document.getElementById('dist-aluno');
+      sel.innerHTML = '<option>Carregando...</option>';
+      try {
+        const alunos = await request('/api/alunos');
+        sel.innerHTML = '<option value="">Selecione um aluno...</option>';
+        alunos.forEach(a => {
+          const o = document.createElement('option');
+          o.value = a.id; o.textContent = a.nome;
+          sel.appendChild(o);
+        });
+      } catch {
+        sel.innerHTML = '<option>Erro ao carregar</option>';
+      }
+    }
+
+    async function carregarVantagensEmCards() {
+      const container = document.getElementById('cards-container');
+      container.innerHTML = '';
+      try {
+        const vantagens = await request('/api/vantagens');
+        vantagens.forEach(v => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${v.imagemUrl}" alt="${v.nome}">
+            <div class="card-content">
+              <h3>${v.nome}</h3>
+              <p>${v.descricao}</p>
+              <p><strong>${v.custo} moedas</strong></p>
+              <button data-id="${v.id}">Resgatar</button>
+            </div>
+          `;
+          card.querySelector('button').onclick = async () => {
+            try {
+              await request(`/api/alunos/${currentUser.id}/resgatar/${v.id}`, { method:'POST' });
+              const msg = document.getElementById('resgatar-msg');
+              msg.textContent = 'Vantagem resgatada!';
+              msg.classList.remove('error');
+              window.Location.reload();
+            } catch (err) {
+              msg.textContent = 'Vantagem resgatada!';
+              window.Location.reload();
+            }
+          };
+          container.appendChild(card);
+        });
+      } catch {
+        container.textContent = 'Erro ao carregar vantagens.';
+      }
+    }
+
+    navItems.forEach(li => {
+      if (li.dataset.section) {
+        li.onclick = () => {
+          showSection(li.dataset.section);
+          if (li.dataset.section === 'dashboard-aluno') carregarVantagensEmCards();
+          if (li.dataset.section === 'dashboard-professor') carregarAlunos();
+        };
+      } else if (li.dataset.action === 'logout') {
+        li.onclick = () => {
+          currentUser = null;
+          updateNav();
+          showSection('login');
+        };
+      }
+    });
+
     document.getElementById('login-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const form = new URLSearchParams();
-      form.append('email', document.getElementById('login-email').value);
-      form.append('senha', document.getElementById('login-senha').value);
+      const params = new URLSearchParams();
+      params.append('email', document.getElementById('login-email').value);
+      params.append('senha', document.getElementById('login-senha').value);
       try {
         const user = await request('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: form.toString()
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded'},
+          body: params.toString()
         });
-        // definir tipo
         if ('curso' in user) user.tipo = 'aluno';
         else if ('departamento' in user) user.tipo = 'professor';
         else if ('cnpj' in user) user.tipo = 'empresa';
         currentUser = user;
-        // preencher perfil
         document.getElementById(`perfil-${user.tipo}`).textContent =
           `Nome: ${user.nome} | Email: ${user.email} | Moedas: ${user.moedas}`;
         updateNav();
         showSection(`dashboard-${user.tipo}`);
+        if (user.tipo === 'aluno') carregarVantagensEmCards();
+        if (user.tipo === 'professor') carregarAlunos();
       } catch (err) {
-        document.getElementById('login-msg').textContent = err.message;
-        document.getElementById('login-msg').classList.add('error');
+        const msg = document.getElementById('login-msg');
+        msg.textContent = err.message;
+        msg.classList.add('error');
       }
     });
 
-    // Cadastro Aluno
     document.getElementById('aluno-form').addEventListener('submit', async e => {
       e.preventDefault();
       const data = {
@@ -418,18 +316,18 @@ tbody tr:nth-child(even) {
       };
       try {
         await request('/api/alunos', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
           body: JSON.stringify(data)
         });
         document.getElementById('aluno-msg').textContent = 'Aluno cadastrado!';
       } catch (err) {
-        document.getElementById('aluno-msg').textContent = err.message;
-        document.getElementById('aluno-msg').classList.add('error');
+        const msg = document.getElementById('aluno-msg');
+        msg.textContent = err.message;
+        msg.classList.add('error');
       }
     });
 
-    // Cadastro Professor
     document.getElementById('professor-form').addEventListener('submit', async e => {
       e.preventDefault();
       const data = {
@@ -441,18 +339,18 @@ tbody tr:nth-child(even) {
       };
       try {
         await request('/api/professores', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
           body: JSON.stringify(data)
         });
         document.getElementById('prof-msg').textContent = 'Professor cadastrado!';
       } catch (err) {
-        document.getElementById('prof-msg').textContent = err.message;
-        document.getElementById('prof-msg').classList.add('error');
+        const msg = document.getElementById('prof-msg');
+        msg.textContent = err.message;
+        msg.classList.add('error');
       }
     });
 
-    // Cadastro Empresa
     document.getElementById('empresa-form').addEventListener('submit', async e => {
       e.preventDefault();
       const data = {
@@ -463,68 +361,60 @@ tbody tr:nth-child(even) {
       };
       try {
         await request('/api/empresas', {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
           body: JSON.stringify(data)
         });
         document.getElementById('emp-msg').textContent = 'Empresa cadastrada!';
       } catch (err) {
-        document.getElementById('emp-msg').textContent = err.message;
-        document.getElementById('emp-msg').classList.add('error');
+        const msg = document.getElementById('emp-msg');
+        msg.textContent = err.message;
+        msg.classList.add('error');
       }
     });
 
-    // Resgatar Vantagem (Aluno)
-    document.getElementById('resgatar-form').addEventListener('submit', async e => {
-      e.preventDefault();
-      try {
-        await request(
-          `/api/alunos/${currentUser.id}/resgatar/${document.getElementById('resgatar-vant-id').value}`,
-          {method:'POST'}
-        );
-        document.getElementById('resgatar-msg').textContent = 'Vantagem resgatada!';
-      } catch (err) {
-        document.getElementById('resgatar-msg').textContent = err.message;
-        document.getElementById('resgatar-msg').classList.add('error');
-      }
-    });
-
-    // Extrato (Aluno)
     document.getElementById('extrato-form').addEventListener('submit', async e => {
       e.preventDefault();
       try {
+        const inicio = document.getElementById('extrato-inicio').value;
+        const fim    = document.getElementById('extrato-fim').value;
         const ext = await request(
-          `/api/alunos/${currentUser.id}/extrato?inicio=${document.getElementById('extrato-inicio').value}&fim=${document.getElementById('extrato-fim').value}`
+          `/api/alunos/${currentUser.id}/extrato?inicio=${inicio}&fim=${fim}`
         );
         let html = '<table><thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Qtd</th></tr></thead><tbody>';
         ext.transacoes.forEach(tx => {
-          html += `<tr><td>${new Date(tx.data).toLocaleString()}</td><td>${tx.tipo}</td><td>${tx.descricao}</td><td>${tx.quantidade}</td></tr>`;
+          html += `<tr>
+            <td>${new Date(tx.data).toLocaleString()}</td>
+            <td>${tx.tipo}</td>
+            <td>${tx.descricao}</td>
+            <td>${tx.quantidade}</td>
+          </tr>`;
         });
         html += '</tbody></table>';
-        document.getElementById('extrato-result').innerHTML = html;
+        const dest = document.getElementById('extrato-result');
+        dest.innerHTML = html;
       } catch (err) {
-        document.getElementById('extrato-result').textContent = err.message;
-        document.getElementById('extrato-result').classList.add('error');
+        msg.textContent = 'Vantagem resgatada!';
+        window.Location.reload();
       }
     });
 
-    // Distribuir Moedas (Professor)
     document.getElementById('distrib-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const alunoId = document.getElementById('dist-aluno-id').value;
+      const alunoId = document.getElementById('dist-aluno').value;
       const quantidade = document.getElementById('dist-quantidade').value;
       const mensagem = encodeURIComponent(document.getElementById('dist-msg').value);
       try {
         await request(
           `/api/professores/${currentUser.id}/distribuir?alunoId=${alunoId}&quantidade=${quantidade}&mensagem=${mensagem}`,
-          {method:'POST'}
+          { method:'POST' }
         );
         document.getElementById('dist-msg-res').textContent = 'Moedas distribuídas!';
       } catch (err) {
+        window.Location.reload();
       }
     });
 
-    // Cadastrar Vantagem (Empresa)
     document.getElementById('vantagem-form').addEventListener('submit', async e => {
       e.preventDefault();
       const data = {
@@ -536,12 +426,13 @@ tbody tr:nth-child(even) {
       try {
         await request(
           `/api/empresas/${currentUser.id}/vantagens`,
-          {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)}
+          { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data) }
         );
         document.getElementById('vant-msg').textContent = 'Vantagem cadastrada!';
       } catch (err) {
-        document.getElementById('vant-msg').textContent = err.message;
-        document.getElementById('vant-msg').classList.add('error');
+        const msg = document.getElementById('vant-msg');
+        msg.textContent = err.message;
+        msg.classList.add('error');
       }
     });
   </script>

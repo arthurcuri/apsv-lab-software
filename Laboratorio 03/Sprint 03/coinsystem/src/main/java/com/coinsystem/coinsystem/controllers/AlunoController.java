@@ -2,6 +2,7 @@ package com.coinsystem.coinsystem.controllers;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,11 @@ public class AlunoController {
 
     public AlunoController(AlunoService svc) {
         this.svc = svc;
+    }
+
+    @GetMapping
+    public List<Aluno> listarTodos() {
+        return svc.listarTodos();
     }
 
     @PostMapping

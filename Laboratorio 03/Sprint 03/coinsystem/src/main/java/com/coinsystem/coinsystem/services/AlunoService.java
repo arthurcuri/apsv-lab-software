@@ -35,6 +35,10 @@ public class AlunoService {
         this.empRepo = empRepo;
     }
 
+    public List<Aluno> listarTodos() {
+        return alunoRepo.findAll();
+    }
+
     public Aluno cadastrar(Aluno aluno) {
         aluno.setMoedas(0);
         return alunoRepo.save(aluno);
