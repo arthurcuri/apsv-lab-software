@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ControllerValidacaoApplication<Controller-Validacao>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "APSV.Controller.Validacao.ControllerValidacaoApplication",
+            "projectName": "Controller-Validacao",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
