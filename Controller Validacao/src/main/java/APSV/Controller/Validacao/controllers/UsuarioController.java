@@ -2,9 +2,10 @@ package APSV.Controller.Validacao.controllers;
 
 import APSV.Controller.Validacao.dto.UsuarioCreateDTO;
 import APSV.Controller.Validacao.dto.UsuarioDTO;
+import APSV.Controller.Validacao.dto.LoginRequestDTO;
+import APSV.Controller.Validacao.dto.RecuperarSenhaDTO;
 import APSV.Controller.Validacao.services.UsuarioService;
 import jakarta.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,5 +57,24 @@ public class UsuarioController {
     public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
         usuarioService.deletarUsuario(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //  Login de usuário
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {
+        boolean sucesso = usuarioService.autenticar(dto.getEmail(), dto.getSenha());
+        return sucesso ? ResponseEntity.ok("Login realizado com sucesso")
+                       : ResponseEntity.status(401).body("Credenciais inválidas");
+    }
+
+    //  Recuperação de senha
+    @PostMapping("/recuperar-senha")
+    public ResponseEntity<String> recuperarSenha(@RequestBody RecuperarSenhaDTO dto) {
+        try {
+            usuarioService.recuperarSenha(dto.getEmail());
+            return ResponseEntity.ok("Link de recuperação enviado para o e-mail informado.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body("Email não encontrado.");
+        }
     }
 }

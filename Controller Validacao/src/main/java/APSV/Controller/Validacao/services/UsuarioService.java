@@ -56,7 +56,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    // ✅ Conversões
+    //  Conversões
 
     private UsuarioDTO converterParaDTO(Usuario usuario) {
         return new UsuarioDTO(
@@ -76,6 +76,20 @@ public class UsuarioService {
         usuario.setCpf(dto.getCpf());
         return usuario;
     }
+
+    //  Método de autenticação (login)
+    public boolean autenticar(String email, String senha) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        return usuario.isPresent() && usuario.get().getSenha().equals(senha);
+    }
+
+    //  Método de recuperação de senha (simulado)
+    public void recuperarSenha(String email) {
+        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
+        if (usuario.isPresent()) {
+            System.out.println("Link de recuperação enviado para: " + email);
+        } else {
+            throw new RuntimeException("Email não encontrado");
+        }
+    }
 }
-
-
