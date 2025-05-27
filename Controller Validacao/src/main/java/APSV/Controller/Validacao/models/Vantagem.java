@@ -14,19 +14,18 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario {
+public class Vantagem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    String nome;
 
-    private String email;
+    String descricao;
 
-    private String senha;
+    String imagem;
+
+    Integer custo;
     
-    private String cpf;
-
-    private int moedas = 0;
 }

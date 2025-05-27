@@ -3,6 +3,8 @@ package APSV.Controller.Validacao.controllers;
 import APSV.Controller.Validacao.dto.UsuarioCreateDTO;
 import APSV.Controller.Validacao.dto.UsuarioDTO;
 import APSV.Controller.Validacao.services.UsuarioService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,7 @@ public class UsuarioController {
 
     // Criar usuário
     @PostMapping
-    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody UsuarioCreateDTO dto) {
+    public ResponseEntity<UsuarioDTO> criarUsuario(@RequestBody @Valid UsuarioCreateDTO dto) {
         UsuarioDTO novoUsuario = usuarioService.criarUsuario(dto);
         return ResponseEntity.ok(novoUsuario);
     }
@@ -56,5 +58,3 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 }
-
-
