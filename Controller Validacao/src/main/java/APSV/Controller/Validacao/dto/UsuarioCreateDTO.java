@@ -25,6 +25,10 @@ public class UsuarioCreateDTO {
     @CPF
     @NotBlank(message = "O CPF é obrigatório")
     private String cpf;
+
+    private String tipo;
+
+    private Integer moedas;
 }
 
 

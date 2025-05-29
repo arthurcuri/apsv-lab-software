@@ -14,7 +14,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Usuario {
+public class EmpresaParceira {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,9 +26,7 @@ public class Usuario {
 
     private String senha;
     
-    private String cpf;
-
-    private String tipo = "ALUNO";
+    private String cnpj;
 
     private Integer moedas = 0;
 }

@@ -15,7 +15,9 @@ public class UsuarioDTO {
     private String email;
 
     private String cpf;
+
+    private String tipo;
     
-    private int moedas;
+    private Integer moedas;
 }
 

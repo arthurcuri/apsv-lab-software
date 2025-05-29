@@ -61,7 +61,7 @@ public class UsuarioController {
 
     //  Login de usuário
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDTO dto) {
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDTO dto) {
         boolean sucesso = usuarioService.autenticar(dto.getEmail(), dto.getSenha());
         return sucesso ? ResponseEntity.ok("Login realizado com sucesso")
                        : ResponseEntity.status(401).body("Credenciais inválidas");
@@ -69,7 +69,7 @@ public class UsuarioController {
 
     //  Recuperação de senha
     @PostMapping("/recuperar-senha")
-    public ResponseEntity<String> recuperarSenha(@RequestBody RecuperarSenhaDTO dto) {
+    public ResponseEntity<String> recuperarSenha(@RequestBody @Valid RecuperarSenhaDTO dto) {
         try {
             usuarioService.recuperarSenha(dto.getEmail());
             return ResponseEntity.ok("Link de recuperação enviado para o e-mail informado.");

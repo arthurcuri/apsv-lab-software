@@ -20,7 +20,6 @@ public class UsuarioService {
     // Criar usuário
     public UsuarioDTO criarUsuario(UsuarioCreateDTO dto) {
         Usuario usuario = converterParaEntity(dto);
-        usuario.setMoedas(0); // Inicializa moedas
         Usuario salvo = usuarioRepository.save(usuario);
         return converterParaDTO(salvo);
     }
@@ -64,18 +63,21 @@ public class UsuarioService {
                 usuario.getNome(),
                 usuario.getEmail(),
                 usuario.getCpf(),
+                usuario.getTipo(),
                 usuario.getMoedas()
         );
     }
 
     private Usuario converterParaEntity(UsuarioCreateDTO dto) {
-        Usuario usuario = new Usuario();
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setSenha(dto.getSenha());
-        usuario.setCpf(dto.getCpf());
-        return usuario;
-    }
+    Usuario usuario = new Usuario();
+    usuario.setNome(dto.getNome());
+    usuario.setEmail(dto.getEmail());
+    usuario.setSenha(dto.getSenha());
+    usuario.setCpf(dto.getCpf());
+    usuario.setMoedas(dto.getMoedas() != null ? dto.getMoedas() : 0);
+    return usuario;
+}
+
 
     //  Método de autenticação (login)
     public boolean autenticar(String email, String senha) {
