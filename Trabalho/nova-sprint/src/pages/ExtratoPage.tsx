@@ -1,0 +1,88 @@
+import { useEffect, useState } from "react";
+import api from "../services/api";
+
+interface Transacao {
+  id: number;
+  tipo: "ENVIO" | "RECEBIMENTO"; // Tipo da transação
+  participante: string; // Nome de quem enviou ou recebeu
+  quantidade: number;
+  motivo: string;
+  data: string; // Data da transação
+}
+
+function ExtratoPage() {
+  const [extratoCompleto, setExtratoCompleto] = useState<Transacao[]>([]);
+  const [filtro, setFiltro] = useState<"TODOS" | "ENVIO" | "RECEBIMENTO">("TODOS");
+
+  useEffect(() => {
+    buscarExtrato();
+  }, []);
+
+  const buscarExtrato = async () => {
+    try {
+      const response = await api.get("/extrato");
+      setExtratoCompleto(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar extrato:", error);
+      alert("Erro ao carregar o extrato.");
+    }
+  };
+
+  const transacoesFiltradas = extratoCompleto.filter((transacao) => {
+    if (filtro === "TODOS") {
+      return true;
+    }
+    return transacao.tipo === filtro;
+  });
+
+  return (
+    <div>
+      <h1>Consulta de Extrato</h1>
+
+      {/* Filtro */}
+      <div style={{ marginBottom: "20px" }}>
+        <label htmlFor="filtro" style={{ marginRight: "10px" }}>Filtrar por tipo:</label>
+        <select
+          id="filtro"
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value as "TODOS" | "ENVIO" | "RECEBIMENTO")}
+          style={{ padding: "8px" }}
+        >
+          <option value="TODOS">Todos</option>
+          <option value="ENVIO">Débito (Enviados)</option>
+          <option value="RECEBIMENTO">Crédito (Recebidos)</option>
+        </select>
+      </div>
+
+      {/* Tabela */}
+      <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
+        <thead>
+          <tr>
+            <th style={{ border: "1px solid black", padding: "8px" }}>Tipo</th>
+            <th style={{ border: "1px solid black", padding: "8px" }}>Participante</th>
+            <th style={{ border: "1px solid black", padding: "8px" }}>Quantidade</th>
+            <th style={{ border: "1px solid black", padding: "8px" }}>Motivo</th>
+            <th style={{ border: "1px solid black", padding: "8px" }}>Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transacoesFiltradas.map((transacao) => (
+            <tr key={transacao.id}>
+              <td style={{ border: "1px solid black", padding: "8px" }}>
+                {transacao.tipo === "ENVIO" ? "Débito" : "Crédito"}
+              </td>
+              <td style={{ border: "1px solid black", padding: "8px" }}>{transacao.participante}</td>
+              <td style={{ border: "1px solid black", padding: "8px" }}>{transacao.quantidade}</td>
+              <td style={{ border: "1px solid black", padding: "8px" }}>{transacao.motivo}</td>
+              <td style={{ border: "1px solid black", padding: "8px" }}>
+                {new Date(transacao.data).toLocaleDateString()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default ExtratoPage;

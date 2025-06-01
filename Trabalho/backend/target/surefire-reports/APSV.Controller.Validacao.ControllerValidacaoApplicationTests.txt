@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: APSV.Controller.Validacao.ControllerValidacaoApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.454 s -- in APSV.Controller.Validacao.ControllerValidacaoApplicationTests
