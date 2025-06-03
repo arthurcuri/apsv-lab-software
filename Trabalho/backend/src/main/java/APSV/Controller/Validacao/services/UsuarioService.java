@@ -1,5 +1,6 @@
 package APSV.Controller.Validacao.services;
 
+import APSV.Controller.Validacao.dto.TransacaoResponseDTO;
 import APSV.Controller.Validacao.dto.UsuarioCreateDTO;
 import APSV.Controller.Validacao.dto.UsuarioDTO;
 import APSV.Controller.Validacao.models.Usuario;
@@ -16,6 +17,9 @@ public class UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private TransacaoService transacaoService;
 
     // Criar usuário
     public UsuarioDTO criarUsuario(UsuarioCreateDTO dto) {
@@ -55,7 +59,7 @@ public class UsuarioService {
         usuarioRepository.deleteById(id);
     }
 
-    //  Conversões
+    // Conversões
 
     private UsuarioDTO converterParaDTO(Usuario usuario) {
         return new UsuarioDTO(
@@ -64,28 +68,74 @@ public class UsuarioService {
                 usuario.getEmail(),
                 usuario.getCpf(),
                 usuario.getTipo(),
-                usuario.getMoedas()
-        );
+                usuario.getMoedas());
     }
 
     private Usuario converterParaEntity(UsuarioCreateDTO dto) {
-    Usuario usuario = new Usuario();
-    usuario.setNome(dto.getNome());
-    usuario.setEmail(dto.getEmail());
-    usuario.setSenha(dto.getSenha());
-    usuario.setCpf(dto.getCpf());
-    usuario.setMoedas(dto.getMoedas() != null ? dto.getMoedas() : 0);
-    return usuario;
-}
-
-
-    //  Método de autenticação (login)
-    public boolean autenticar(String email, String senha) {
-        Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
-        return usuario.isPresent() && usuario.get().getSenha().equals(senha);
+        Usuario usuario = new Usuario();
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(dto.getSenha());
+        usuario.setCpf(dto.getCpf());
+        usuario.setMoedas(dto.getMoedas() != null ? dto.getMoedas() : 0);
+        return usuario;
     }
 
-    //  Método de recuperação de senha (simulado)
+    // Método de autenticação (login)
+    public UsuarioDTO autenticar(String email, String senha) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            if (usuario.getSenha().equals(senha)) {
+                return new UsuarioDTO(
+                        usuario.getId(),
+                        usuario.getNome(),
+                        usuario.getEmail(),
+                        usuario.getCpf(),
+                        usuario.getTipo(),
+                        usuario.getMoedas());
+            }
+        }
+
+        return null;
+    }
+
+    public List<Usuario> listarPorTipo(String tipo) {
+        return usuarioRepository.findByTipo(tipo);
+    }
+
+    public void distribuirMoedas(Long professorId, Long alunoId, int quantidade, String motivo) {
+        Usuario professor = usuarioRepository.findById(professorId)
+                .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
+
+        Usuario aluno = usuarioRepository.findById(alunoId)
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+
+        if (professor.getMoedas() < quantidade) {
+            throw new RuntimeException("Saldo insuficiente");
+        }
+
+        professor.setMoedas(professor.getMoedas() - quantidade);
+        aluno.setMoedas(aluno.getMoedas() + quantidade);
+
+        usuarioRepository.save(professor);
+        usuarioRepository.save(aluno);
+
+        // Cria transação
+        transacaoService.salvarTransacao(professor, aluno, quantidade, motivo);
+    }
+
+    public List<TransacaoResponseDTO> listarTransacoesPorOrigem(Long origemId) {
+        return transacaoService.listarPorOrigem(origemId);
+    }
+
+public List<TransacaoResponseDTO> listarTransacoesPorDestino(Long destinoId) {
+    // Busca as transações pelo destinoId usando o transacaoService
+    return transacaoService.listarPorDestino(destinoId);
+}
+
+    // Método de recuperação de senha (simulado)
     public void recuperarSenha(String email) {
         Optional<Usuario> usuario = usuarioRepository.findByEmail(email);
         if (usuario.isPresent()) {

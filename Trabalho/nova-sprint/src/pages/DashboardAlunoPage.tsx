@@ -1,36 +1,47 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 
+interface Usuario {
+  id: number;
+  nome: string;
+}
+
 interface Historico {
   id: number;
-  professor: string;
+  origemId: number;
   quantidade: number;
   motivo: string;
-  dataRecebimento: string;
+  data: string;
 }
 
 interface Vantagem {
   id: number;
   nome: string;
   descricao: string;
-  imagemUrl: string;
+  imagem: string;
   custo: number;
 }
 
 function DashboardAlunoPage() {
   const [saldo, setSaldo] = useState(0);
   const [historico, setHistorico] = useState<Historico[]>([]);
+  const [professores, setProfessores] = useState<Usuario[]>([]);
   const [vantagens, setVantagens] = useState<Vantagem[]>([]);
 
+  const usuarioId = sessionStorage.getItem("usuarioId");
+
   useEffect(() => {
-    buscarSaldo();
-    buscarHistorico();
-    buscarVantagens();
+    if (usuarioId) {
+      buscarSaldo();
+      buscarHistorico();
+      buscarVantagens();
+      buscarProfessores();
+    }
   }, []);
 
   const buscarSaldo = async () => {
     try {
-      const response = await api.get("/aluno/saldo");
+      const response = await api.get(`/usuarios/${usuarioId}/saldo`);
       setSaldo(response.data.saldo);
     } catch (error) {
       console.error("Erro ao buscar saldo:", error);
@@ -39,16 +50,25 @@ function DashboardAlunoPage() {
 
   const buscarHistorico = async () => {
     try {
-      const response = await api.get("/aluno/historico");
+      const response = await api.get(`/usuarios/${usuarioId}/historico-recebidos`);
       setHistorico(response.data);
     } catch (error) {
       console.error("Erro ao buscar histórico:", error);
     }
   };
 
+  const buscarProfessores = async () => {
+    try {
+      const response = await api.get("/usuarios"); // ou /usuarios?tipo=PROFESSOR se houver filtro
+      setProfessores(response.data.filter((u: any) => u.tipo === "PROFESSOR"));
+    } catch (error) {
+      console.error("Erro ao buscar professores:", error);
+    }
+  };
+
   const buscarVantagens = async () => {
     try {
-      const response = await api.get("/aluno/vantagens");
+      const response = await api.get("/vantagens");
       setVantagens(response.data);
     } catch (error) {
       console.error("Erro ao buscar vantagens:", error);
@@ -87,14 +107,32 @@ function DashboardAlunoPage() {
           </tr>
         </thead>
         <tbody>
-          {historico.map((item) => (
-            <tr key={item.id}>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{item.professor}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{new Date(item.dataRecebimento).toLocaleDateString()}</td>
-            </tr>
-          ))}
+          {historico.map((item) => {
+            const professor = professores.find((p) => p.id === item.origemId);
+            const nomeProfessor = professor ? professor.nome : "Desconhecido";
+            let dataFormatada = "Data não disponível";
+            if (item.data) {
+              const data = new Date(item.data);
+              if (!isNaN(data.getTime())) {
+                dataFormatada = data.toLocaleString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit"
+                });
+              }
+            }
+            return (
+              <tr key={item.id}>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{nomeProfessor}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{dataFormatada}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 
@@ -103,7 +141,7 @@ function DashboardAlunoPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {vantagens.map((vantagem) => (
           <div key={vantagem.id} style={{ border: "1px solid black", padding: "10px", width: "250px" }}>
-            <img src={vantagem.imagemUrl} alt={vantagem.nome} style={{ width: "100%", height: "150px", objectFit: "cover" }} />
+            <img src={vantagem.imagem} alt={vantagem.nome} style={{ width: "100%", height: "150px", objectFit: "cover" }} />
             <h3>{vantagem.nome}</h3>
             <p>{vantagem.descricao}</p>
             <p><strong>Custo:</strong> {vantagem.custo} moedas</p>

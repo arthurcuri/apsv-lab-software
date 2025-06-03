@@ -14,9 +14,23 @@ function LoginPage() {
         email,
         senha,
       });
-      console.log("Login bem-sucedido:", response.data);
+
+      const { id, nome, tipo } = response.data;
+
+      // 🔥 Salva no sessionStorage
+      sessionStorage.setItem("usuarioId", id);
+      sessionStorage.setItem("usuarioNome", nome);
+      sessionStorage.setItem("usuarioTipo", tipo);
+
       alert("Login realizado com sucesso!");
-      // Aqui você pode redirecionar para o Dashboard
+
+      if (tipo === "ALUNO") {
+        navigate("/dashboard-aluno");
+      } else if (tipo === "PROFESSOR") {
+        navigate("/dashboard-professor");
+      } else {
+        alert("Tipo de usuário não reconhecido!");
+      }
     } catch (error) {
       console.error("Erro no login:", error);
       alert("Credenciais inválidas!");
@@ -53,8 +67,8 @@ function LoginPage() {
         />
 
         {/* Esqueci minha senha */}
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={handleRecuperarSenha}
           style={{
             background: "none",
@@ -74,8 +88,8 @@ function LoginPage() {
         </button>
 
         {/* Botão Cadastrar */}
-        <button 
-          type="button" 
+        <button
+          type="button"
           onClick={handleCadastro}
           style={{
             padding: "10px",

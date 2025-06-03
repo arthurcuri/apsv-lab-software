@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+
 
 interface Aluno {
   id: number;
@@ -8,10 +10,10 @@ interface Aluno {
 
 interface Historico {
   id: number;
-  aluno: string;
+  destinoId: number;
   quantidade: number;
   motivo: string;
-  dataEnvio: string;
+  data: string;
 }
 
 function DashboardProfessorPage() {
@@ -21,16 +23,25 @@ function DashboardProfessorPage() {
   const [quantidade, setQuantidade] = useState(0);
   const [motivo, setMotivo] = useState("");
   const [historico, setHistorico] = useState<Historico[]>([]);
+  const navigate = useNavigate();
+
+  const usuarioId = sessionStorage.getItem("usuarioId");
 
   useEffect(() => {
-    buscarSaldo();
-    buscarAlunos();
-    buscarHistorico();
+    if (usuarioId) {
+      buscarSaldo();
+      buscarAlunos();
+      buscarHistorico();
+    } else {
+      alert("Usuário não logado!");
+      navigate("/"); // volta para login se não tiver ID
+    }
   }, []);
+
 
   const buscarSaldo = async () => {
     try {
-      const response = await api.get("/professor/saldo");
+      const response = await api.get(`/usuarios/${usuarioId}/saldo`);
       setSaldo(response.data.saldo);
     } catch (error) {
       console.error("Erro ao buscar saldo:", error);
@@ -39,7 +50,7 @@ function DashboardProfessorPage() {
 
   const buscarAlunos = async () => {
     try {
-      const response = await api.get("/professor/alunos");
+      const response = await api.get("/usuarios/alunos");
       setAlunos(response.data);
     } catch (error) {
       console.error("Erro ao buscar alunos:", error);
@@ -48,7 +59,7 @@ function DashboardProfessorPage() {
 
   const buscarHistorico = async () => {
     try {
-      const response = await api.get("/professor/historico");
+      const response = await api.get(`/usuarios/${usuarioId}/historico`);
       setHistorico(response.data);
     } catch (error) {
       console.error("Erro ao buscar histórico:", error);
@@ -59,7 +70,7 @@ function DashboardProfessorPage() {
     e.preventDefault();
 
     try {
-      await api.post("/professor/distribuir-moedas", {
+      await api.post(`/usuarios/${usuarioId}/distribuir-moedas`, {
         alunoId: alunoSelecionado,
         quantidade,
         motivo
@@ -67,7 +78,6 @@ function DashboardProfessorPage() {
       alert("Moedas distribuídas com sucesso!");
       buscarSaldo();
       buscarHistorico();
-      // Limpar o formulário
       setAlunoSelecionado("");
       setQuantidade(0);
       setMotivo("");
@@ -76,6 +86,7 @@ function DashboardProfessorPage() {
       alert("Erro ao distribuir moedas.");
     }
   };
+
 
   return (
     <div>
@@ -135,15 +146,40 @@ function DashboardProfessorPage() {
           </tr>
         </thead>
         <tbody>
-          {historico.map((item) => (
-            <tr key={item.id}>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{item.aluno}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
-              <td style={{ border: "1px solid black", padding: "8px" }}>{new Date(item.dataEnvio).toLocaleDateString()}</td>
-            </tr>
-          ))}
+          {historico.map((item) => {
+            // Busca o nome do aluno pelo destinoId
+            let nomeAluno = "Desconhecido";
+            const alunoEncontrado = alunos.find((a) => a.id === item.destinoId);
+            if (alunoEncontrado) {
+              nomeAluno = alunoEncontrado.nome;
+            }
+
+            let dataFormatada = "Data não disponível";
+            if (item.data) {
+              const data = new Date(item.data);
+              if (!isNaN(data.getTime())) {
+                dataFormatada = data.toLocaleString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit"
+                });
+              }
+            }
+
+            return (
+              <tr key={item.id}>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{nomeAluno}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{dataFormatada}</td>
+              </tr>
+            );
+          })}
         </tbody>
+
       </table>
     </div>
   );
