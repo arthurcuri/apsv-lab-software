@@ -28,6 +28,8 @@ public class Usuario {
     
     private String cpf;
 
+    private String cnpj;
+
     private String tipo = "ALUNO";
 
     private Integer moedas = 0;

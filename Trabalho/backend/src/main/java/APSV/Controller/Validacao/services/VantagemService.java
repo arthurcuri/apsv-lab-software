@@ -2,7 +2,9 @@ package APSV.Controller.Validacao.services;
 
 import APSV.Controller.Validacao.dto.VantagemCreateDTO;
 import APSV.Controller.Validacao.dto.VantagemDTO;
+import APSV.Controller.Validacao.models.Usuario;
 import APSV.Controller.Validacao.models.Vantagem;
+import APSV.Controller.Validacao.repositories.UsuarioRepository;
 import APSV.Controller.Validacao.repositories.VantagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,9 @@ public class VantagemService {
 
     @Autowired
     private VantagemRepository vantagemRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository; // Importe e injete seu repository de usuário
 
     // Criar
     public VantagemDTO criarVantagem(VantagemCreateDTO dto) {
@@ -71,5 +76,26 @@ public class VantagemService {
                 v.getImagem(),
                 v.getCusto()
         );
+    }
+
+    public void resgatarVantagem(Long usuarioId, Long vantagemId) {
+        // Buscar usuário
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+            .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Buscar vantagem
+        Vantagem vantagem = vantagemRepository.findById(vantagemId)
+            .orElseThrow(() -> new RuntimeException("Vantagem não encontrada"));
+
+        // Verificar saldo
+        if (usuario.getMoedas() < vantagem.getCusto()) {
+            throw new RuntimeException("Saldo insuficiente para resgatar esta vantagem.");
+        }
+
+        // Debitar saldo
+        usuario.setMoedas(usuario.getMoedas() - vantagem.getCusto());
+        usuarioRepository.save(usuario);
+
+        // Aqui você pode adicionar lógica para registrar o resgate, se desejar
     }
 }

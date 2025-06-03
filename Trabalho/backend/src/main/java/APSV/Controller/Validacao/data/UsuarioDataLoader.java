@@ -26,7 +26,7 @@ public void run(String... args) throws Exception {
         c1.setSenha("1234");
         c1.setEmail("jose@gmail.com");
         c1.setTipo("ALUNO");
-        c1.setMoedas(50);
+        c1.setMoedas(150);
         usuarioRepository.save(c1);
 
         Usuario c2 = new Usuario();
@@ -35,7 +35,7 @@ public void run(String... args) throws Exception {
         c2.setSenha("1234");
         c2.setEmail("maria@gmail.com");
         c2.setTipo("ALUNO");
-        c2.setMoedas(30);
+        c2.setMoedas(100);
         usuarioRepository.save(c2);
 
         Usuario c3 = new Usuario();
@@ -55,6 +55,25 @@ public void run(String... args) throws Exception {
         c4.setTipo("PROFESSOR");
         c4.setMoedas(200);
         usuarioRepository.save(c4);
+
+        Usuario c5 = new Usuario();
+        c5.setNome("Microsft Corporation");
+        c5.setCnpj("12.345.678/0001-90");
+        c5.setSenha("1234");
+        c5.setEmail("microsoft@gmail.com");
+        c5.setTipo("EMPRESA");
+        c5.setMoedas(0);
+        usuarioRepository.save(c5);
+
+        Usuario c6 = new Usuario();
+        c6.setNome("Google LLC");
+        c6.setCnpj("98.765.432/0001-01");
+        c6.setSenha("1234");
+        c6.setEmail("google@gmail.com");
+        c6.setTipo("EMPRESA");
+        c6.setMoedas(0);
+        usuarioRepository.save(c6);
+        
     }
 }
 }

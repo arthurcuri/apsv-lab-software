@@ -3,11 +3,11 @@ import api from "../services/api";
 
 interface Transacao {
   id: number;
-  tipo: "ENVIO" | "RECEBIMENTO"; // Tipo da transação
-  participante: string; // Nome de quem enviou ou recebeu
+  tipo: "ENVIO" | "RECEBIMENTO";
+  participante: string;
   quantidade: number;
   motivo: string;
-  data: string; // Data da transação
+  data: string;
 }
 
 function ExtratoPage() {
@@ -19,9 +19,60 @@ function ExtratoPage() {
   }, []);
 
   const buscarExtrato = async () => {
+    const usuarioId = sessionStorage.getItem("usuarioId");
+    if (!usuarioId) {
+      alert("Usuário não logado!");
+      return;
+    }
     try {
-      const response = await api.get("/extrato");
-      setExtratoCompleto(response.data);
+      // Busca envios (como origem)
+      const envios = await api.get(`/usuarios/${usuarioId}/historico`);
+      // Busca recebimentos (como destino)
+      const recebimentos = await api.get(`/usuarios/${usuarioId}/historico-recebidos`);
+
+      // Mapeia para o formato esperado
+      const transacoesEnvio: Transacao[] = envios.data.map((t: any) => ({
+        id: t.id,
+        tipo: "ENVIO",
+        participante: t.destinoId, // será substituído pelo nome abaixo
+        quantidade: t.quantidade,
+        motivo: t.motivo,
+        data: t.data,
+      }));
+
+      const transacoesRecebimento: Transacao[] = recebimentos.data.map((t: any) => ({
+        id: t.id,
+        tipo: "RECEBIMENTO",
+        participante: t.origemId, // será substituído pelo nome abaixo
+        quantidade: t.quantidade,
+        motivo: t.motivo,
+        data: t.data,
+      }));
+
+      // Busca nomes dos participantes (opcional, mas recomendado)
+      // Você pode otimizar buscando todos usuários de uma vez, aqui é um exemplo simples:
+      const usuariosCache: Record<number, string> = {};
+
+      async function getNomeUsuario(id: number) {
+        if (usuariosCache[id]) return usuariosCache[id];
+        try {
+          const res = await api.get(`/usuarios/${id}`);
+          usuariosCache[id] = res.data.nome;
+          return res.data.nome;
+        } catch {
+          return "Desconhecido";
+        }
+      }
+
+      // Preenche nomes dos participantes
+      for (const t of transacoesEnvio) {
+        t.participante = await getNomeUsuario(t.participante as unknown as number);
+      }
+      for (const t of transacoesRecebimento) {
+        t.participante = await getNomeUsuario(t.participante as unknown as number);
+      }
+
+      setExtratoCompleto([...transacoesEnvio, ...transacoesRecebimento].sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()));
     } catch (error) {
       console.error("Erro ao buscar extrato:", error);
       alert("Erro ao carregar o extrato.");
@@ -38,8 +89,6 @@ function ExtratoPage() {
   return (
     <div>
       <h1>Consulta de Extrato</h1>
-
-      {/* Filtro */}
       <div style={{ marginBottom: "20px" }}>
         <label htmlFor="filtro" style={{ marginRight: "10px" }}>Filtrar por tipo:</label>
         <select
@@ -53,8 +102,6 @@ function ExtratoPage() {
           <option value="RECEBIMENTO">Crédito (Recebidos)</option>
         </select>
       </div>
-
-      {/* Tabela */}
       <table style={{ width: "100%", borderCollapse: "collapse", marginTop: "20px" }}>
         <thead>
           <tr>

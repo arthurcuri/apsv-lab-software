@@ -23,7 +23,12 @@ function ResgateVantagemPage() {
 
   const buscarSaldo = async () => {
     try {
-      const response = await api.get("/aluno/saldo");
+      const usuarioId = sessionStorage.getItem("usuarioId");
+      if (!usuarioId) {
+        alert("Usuário não logado!");
+        return;
+      }
+      const response = await api.get(`/usuarios/${usuarioId}/saldo`);
       setSaldo(response.data.saldo);
     } catch (error) {
       console.error("Erro ao buscar saldo:", error);
@@ -32,7 +37,8 @@ function ResgateVantagemPage() {
 
   const buscarVantagens = async () => {
     try {
-      const response = await api.get("/aluno/vantagens");
+      // Geralmente a rota é apenas /vantagens
+      const response = await api.get("/vantagens");
       setVantagens(response.data);
     } catch (error) {
       console.error("Erro ao buscar vantagens:", error);
@@ -49,8 +55,17 @@ function ResgateVantagemPage() {
       return;
     }
 
+    const usuarioId = sessionStorage.getItem("usuarioId");
+    if (!usuarioId) {
+      alert("Usuário não logado!");
+      return;
+    }
+
     try {
-      await api.post(`/aluno/resgatar/${vantagem.id}`);
+      await api.post("/vantagens/resgatar", {
+        usuarioId: Number(usuarioId),
+        vantagemId: vantagem.id,
+      });
 
       const novoSaldo = saldo - vantagem.custo;
       setSaldoAntes(saldo);

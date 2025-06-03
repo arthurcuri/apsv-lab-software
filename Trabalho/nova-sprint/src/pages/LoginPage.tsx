@@ -17,7 +17,7 @@ function LoginPage() {
 
       const { id, nome, tipo } = response.data;
 
-      // 🔥 Salva no sessionStorage
+      // Salva os dados do usuario no sessionStorage
       sessionStorage.setItem("usuarioId", id);
       sessionStorage.setItem("usuarioNome", nome);
       sessionStorage.setItem("usuarioTipo", tipo);
@@ -28,7 +28,9 @@ function LoginPage() {
         navigate("/dashboard-aluno");
       } else if (tipo === "PROFESSOR") {
         navigate("/dashboard-professor");
-      } else {
+      }else if (tipo === "EMPRESA") {
+        navigate("/cadastro-vantagem");
+      }else {
         alert("Tipo de usuário não reconhecido!");
       }
     } catch (error) {

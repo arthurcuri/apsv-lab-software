@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/vantagens")
@@ -55,5 +56,17 @@ public class VantagemController {
     public ResponseEntity<Void> deletarVantagem(@PathVariable Long id) {
         vantagemService.deletarVantagem(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/resgatar")
+    public ResponseEntity<?> resgatarVantagem(@RequestBody Map<String, Long> payload) {
+        Long usuarioId = payload.get("usuarioId");
+        Long vantagemId = payload.get("vantagemId");
+        try {
+            vantagemService.resgatarVantagem(usuarioId, vantagemId);
+            return ResponseEntity.ok().body("Vantagem resgatada com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

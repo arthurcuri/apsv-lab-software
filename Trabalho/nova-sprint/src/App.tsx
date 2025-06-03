@@ -1,5 +1,8 @@
 import { Routes, Route, useLocation } from 'react-router-dom'; // IMPORTANTE: useLocation
 import Sidebar from './components/Sidebar';
+import SidebarAluno from "./components/SidebarAluno";
+import SidebarEmpresa from "./components/SidebarEmpresa";
+import SidebarProfessor from "./components/SidebarProfessor";
 
 import LoginPage from './pages/LoginPage';
 import CadastroPage from './pages/CadastroPage';
@@ -11,20 +14,27 @@ import CadastroVantagemPage from './pages/CadastroVantagemPage';
 import ResgateVantagemPage from './pages/ResgateVantagemPage';
 
 function App() {
-  const location = useLocation(); // Hook que dá a URL atual
+  const location = useLocation();
 
-  // Lista de páginas que NÃO terão Sidebar
   const paginasSemSidebar = ['/', '/cadastro', '/recuperar-senha'];
 
-  // Verificar se a página atual precisa de Sidebar
   const exibirSidebar = !paginasSemSidebar.includes(location.pathname);
+
+  // Pega o tipo de usuário do sessionStorage
+  const usuarioTipo = sessionStorage.getItem("usuarioTipo");
+
+  // Função para escolher a sidebar correta
+  const renderSidebar = () => {
+    if (!exibirSidebar) return null;
+    if (usuarioTipo === "ALUNO") return <SidebarAluno />;
+    if (usuarioTipo === "PROFESSOR") return <SidebarProfessor />;
+    if (usuarioTipo === "EMPRESA") return <SidebarEmpresa />;
+    return <Sidebar />; // Sidebar padrão
+  };
 
   return (
     <div style={{ display: 'flex' }}>
-      {/* Condicionalmente exibir Sidebar */}
-      {exibirSidebar && <Sidebar />}
-
-      {/* Ajuste da margem */}
+      {renderSidebar()}
       <div style={{ marginLeft: exibirSidebar ? '270px' : '0', padding: '20px', width: '100%' }}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
