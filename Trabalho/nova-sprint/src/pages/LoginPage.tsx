@@ -10,7 +10,7 @@ function LoginPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", {
+      const response = await api.post("/usuarios/login", {
         email,
         senha,
       });

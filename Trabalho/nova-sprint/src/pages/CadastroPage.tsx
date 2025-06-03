@@ -20,7 +20,7 @@ function CadastroPage() {
     }
 
     try {
-      const response = await api.post("/cadastrar", {
+      const response = await api.post("/usuarios", {
         nome,
         email,
         cpf,
