@@ -5,14 +5,19 @@ import APSV.Controller.Validacao.dto.UsuarioDTO;
 import APSV.Controller.Validacao.dto.LoginRequestDTO;
 import APSV.Controller.Validacao.dto.RecuperarSenhaDTO;
 import APSV.Controller.Validacao.dto.TransacaoResponseDTO;
+import APSV.Controller.Validacao.dto.TransacaoDTO;
 import APSV.Controller.Validacao.services.UsuarioService;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
+import jakarta.validation.ConstraintViolation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -21,6 +26,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private Validator validator;
 
     // Criar usuário
     @PostMapping
@@ -88,14 +96,55 @@ public class UsuarioController {
             @PathVariable Long id, // ID do professor
             @RequestBody Map<String, Object> payload) {
 
-        Long alunoId = Long.valueOf(payload.get("alunoId").toString());
-        int quantidade = Integer.parseInt(payload.get("quantidade").toString());
-        String motivo = payload.get("motivo").toString();
-
         try {
-            usuarioService.distribuirMoedas(id, alunoId, quantidade, motivo);
+            // Criar TransacaoDTO a partir do payload
+            TransacaoDTO transacaoDTO = new TransacaoDTO();
+            transacaoDTO.setOrigemId(id); // Professor é a origem
+            transacaoDTO.setDestinoId(Long.valueOf(payload.get("alunoId").toString()));
+            
+            // Tratar a quantidade de forma especial para permitir validação @Digits
+            Object quantidadeObj = payload.get("quantidade");
+            Integer quantidade = null;
+            
+            if (quantidadeObj != null) {
+                try {
+                    // Tentar converter para Double primeiro para detectar números fracionados
+                    Double quantidadeDouble = Double.valueOf(quantidadeObj.toString());
+                    
+                    // Verificar se é um número inteiro
+                    if (quantidadeDouble % 1 == 0) {
+                        quantidade = quantidadeDouble.intValue();
+                    } else {
+                        // É um número fracionado - definir um valor que falhará na validação @Digits
+                        // Vamos usar uma string que representa o número fracionado
+                        transacaoDTO.setQuantidade(null); // Será tratado pela validação
+                        
+                        // Validar usando as anotações do TransacaoDTO
+                        Set<ConstraintViolation<TransacaoDTO>> violations = validator.validate(transacaoDTO);
+                        
+                        // Adicionar violação customizada para número fracionado
+                        return ResponseEntity.badRequest().body(Map.of("erro", "A quantidade de moedas deve ser um número inteiro"));
+                    }
+                } catch (NumberFormatException e) {
+                    return ResponseEntity.badRequest().body(Map.of("erro", "Quantidade deve ser um número válido"));
+                }
+            }
+            
+            transacaoDTO.setQuantidade(quantidade);
+            transacaoDTO.setMotivo(payload.get("motivo").toString());
+            transacaoDTO.setData(LocalDateTime.now());
+
+            // Validar usando as anotações do TransacaoDTO
+            Set<ConstraintViolation<TransacaoDTO>> violations = validator.validate(transacaoDTO);
+            
+            if (!violations.isEmpty()) {
+                String errorMessage = violations.iterator().next().getMessage();
+                return ResponseEntity.badRequest().body(Map.of("erro", errorMessage));
+            }
+
+            usuarioService.distribuirMoedas(id, transacaoDTO.getDestinoId(), transacaoDTO.getQuantidade(), transacaoDTO.getMotivo());
             return ResponseEntity.ok(Map.of("mensagem", "Moedas distribuídas com sucesso"));
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
         }
     }

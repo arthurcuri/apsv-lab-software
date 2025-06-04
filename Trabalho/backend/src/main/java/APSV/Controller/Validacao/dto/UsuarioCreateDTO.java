@@ -23,8 +23,9 @@ public class UsuarioCreateDTO {
     private String senha;
 
     @CPF
-    @NotBlank(message = "O CPF é obrigatório")
     private String cpf;
+
+    private String cnpj;
 
     private String tipo;
 

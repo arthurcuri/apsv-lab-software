@@ -52,7 +52,7 @@ function LoginPage() {
       <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", width: "300px" }}>
         <h2>Bem-vindo!</h2>
         <input
-          type="email"
+          type="text"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

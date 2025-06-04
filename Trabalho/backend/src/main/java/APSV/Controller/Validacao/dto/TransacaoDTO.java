@@ -3,6 +3,7 @@ package APSV.Controller.Validacao.dto;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,6 @@ public class TransacaoDTO {
         @Digits(integer = 10, fraction = 0, message = "A quantidade de moedas deve ser um número inteiro")
         private Integer quantidade;
 
-        public String Motivo;
+        @NotBlank(message = "O motivo é obrigatório")
+        private String motivo;
 }

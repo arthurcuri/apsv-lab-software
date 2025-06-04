@@ -16,6 +16,8 @@ public class UsuarioDTO {
 
     private String cpf;
 
+    private String cnpj;
+
     private String tipo;
     
     private Integer moedas;

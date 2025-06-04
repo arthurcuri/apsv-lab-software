@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 
 interface Vantagem {
+  imagem: string | undefined;
   id: number;
   nome: string;
   descricao: string;
@@ -93,7 +94,7 @@ function ResgateVantagemPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
         {vantagens.map((vantagem) => (
           <div key={vantagem.id} style={{ border: "1px solid black", padding: "10px", width: "250px" }}>
-            <img src={vantagem.imagemUrl} alt={vantagem.nome} style={{ width: "100%", height: "150px", objectFit: "cover" }} />
+            <img src={vantagem.imagem} alt={vantagem.nome} style={{ width: "100%", height: "150px", objectFit: "cover" }} />
             <h3>{vantagem.nome}</h3>
             <p>{vantagem.descricao}</p>
             <p><strong>Custo:</strong> {vantagem.custo} moedas</p>

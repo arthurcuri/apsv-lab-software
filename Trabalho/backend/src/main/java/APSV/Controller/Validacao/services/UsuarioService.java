@@ -23,6 +23,19 @@ public class UsuarioService {
 
     // Criar usuário
     public UsuarioDTO criarUsuario(UsuarioCreateDTO dto) {
+        // Validação customizada baseada no tipo
+        String tipo = dto.getTipo() != null ? dto.getTipo() : "ALUNO";
+        
+        if ("EMPRESA".equals(tipo)) {
+            if (dto.getCnpj() == null || dto.getCnpj().trim().isEmpty()) {
+                throw new RuntimeException("CNPJ é obrigatório para empresas");
+            }
+        } else {
+            if (dto.getCpf() == null || dto.getCpf().trim().isEmpty()) {
+                throw new RuntimeException("CPF é obrigatório para alunos e professores");
+            }
+        }
+        
         Usuario usuario = converterParaEntity(dto);
         Usuario salvo = usuarioRepository.save(usuario);
         return converterParaDTO(salvo);
@@ -49,6 +62,8 @@ public class UsuarioService {
             usuario.setEmail(dto.getEmail());
             usuario.setSenha(dto.getSenha());
             usuario.setCpf(dto.getCpf());
+            usuario.setCnpj(dto.getCnpj());
+            usuario.setTipo(dto.getTipo() != null ? dto.getTipo() : usuario.getTipo());
             Usuario atualizado = usuarioRepository.save(usuario);
             return converterParaDTO(atualizado);
         }).orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
@@ -67,6 +82,7 @@ public class UsuarioService {
                 usuario.getNome(),
                 usuario.getEmail(),
                 usuario.getCpf(),
+                usuario.getCnpj(),
                 usuario.getTipo(),
                 usuario.getMoedas());
     }
@@ -77,7 +93,26 @@ public class UsuarioService {
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
         usuario.setCpf(dto.getCpf());
-        usuario.setMoedas(dto.getMoedas() != null ? dto.getMoedas() : 0);
+        usuario.setCnpj(dto.getCnpj());
+        usuario.setTipo(dto.getTipo() != null ? dto.getTipo() : "ALUNO");
+        
+        // Define moedas padrão baseado no tipo
+        if (dto.getMoedas() != null) {
+            usuario.setMoedas(dto.getMoedas());
+        } else {
+            switch (usuario.getTipo()) {
+                case "PROFESSOR":
+                    usuario.setMoedas(1000);
+                    break;
+                case "EMPRESA":
+                    usuario.setMoedas(0);
+                    break;
+                default: // ALUNO
+                    usuario.setMoedas(0);
+                    break;
+            }
+        }
+        
         return usuario;
     }
 
@@ -93,6 +128,7 @@ public class UsuarioService {
                         usuario.getNome(),
                         usuario.getEmail(),
                         usuario.getCpf(),
+                        usuario.getCnpj(),
                         usuario.getTipo(),
                         usuario.getMoedas());
             }

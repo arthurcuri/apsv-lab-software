@@ -76,8 +76,16 @@ function DashboardAlunoPage() {
   };
 
   const handleResgatar = async (idVantagem: number) => {
+    if (!usuarioId) {
+      alert("Usuário não logado!");
+      return;
+    }
+
     try {
-      await api.post(`/aluno/resgatar/${idVantagem}`);
+      await api.post(`/vantagens/resgatar`, {
+        usuarioId: Number(usuarioId),
+        vantagemId: idVantagem
+      });
       alert("Vantagem resgatada com sucesso!");
       buscarSaldo();
     } catch (error) {
