@@ -63,9 +63,12 @@ function ResgateVantagemPage() {
     }
 
     try {
-      await api.post("/vantagens/resgatar", {
-        usuarioId: Number(usuarioId),
-        vantagemId: vantagem.id,
+      // Altere aqui para chamar a rota correta de transação/resgate
+      await api.post("/transacoes/resgatar", null, {
+        params: {
+          usuarioId: Number(usuarioId),
+          vantagemId: vantagem.id,
+        },
       });
 
       const novoSaldo = saldo - vantagem.custo;

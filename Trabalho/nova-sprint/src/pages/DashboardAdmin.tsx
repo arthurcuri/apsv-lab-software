@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../services/api";
 import { useNavigate } from "react-router-dom";
 
-interface Aluno {
+interface Usuario {
   id: number;
   nome: string;
 }
@@ -15,10 +15,10 @@ interface Historico {
   data: string;
 }
 
-function DashboardProfessorPage() {
+function DashboardAdmin() {
   const [saldo, setSaldo] = useState(0);
-  const [alunos, setAlunos] = useState<Aluno[]>([]);
-  const [alunoSelecionado, setAlunoSelecionado] = useState("");
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState("");
   const [quantidade, setQuantidade] = useState(0);
   const [motivo, setMotivo] = useState("");
   const [historico, setHistorico] = useState<Historico[]>([]);
@@ -30,7 +30,7 @@ function DashboardProfessorPage() {
   useEffect(() => {
     if (usuarioId) {
       buscarSaldo();
-      buscarAlunos();
+      buscarUsuarios();
       buscarHistorico();
     } else {
       alert("Usuário não logado!");
@@ -47,12 +47,13 @@ function DashboardProfessorPage() {
     }
   };
 
-  const buscarAlunos = async () => {
+  // Alterado para buscar todos os usuários
+  const buscarUsuarios = async () => {
     try {
-      const response = await api.get("/usuarios/alunos");
-      setAlunos(response.data);
+      const response = await api.get("/usuarios");
+      setUsuarios(response.data);
     } catch (error) {
-      console.error("Erro ao buscar alunos:", error);
+      console.error("Erro ao buscar usuários:", error);
     }
   };
 
@@ -71,20 +72,19 @@ function DashboardProfessorPage() {
 
     try {
       await api.post(`/usuarios/${usuarioId}/distribuir-moedas`, {
-        alunoId: alunoSelecionado,
+        alunoId: usuarioSelecionado, // Mantém o nome do campo para compatibilidade backend
         quantidade,
         motivo
       });
       alert("Moedas distribuídas com sucesso!");
       buscarSaldo();
       buscarHistorico();
-      setAlunoSelecionado("");
+      setUsuarioSelecionado("");
       setQuantidade(0);
       setMotivo("");
     } catch (error: any) {
       // Se o back-end retornar um objeto de erros de validação
       if (error.response && error.response.status === 400 && error.response.data) {
-        // Pode ser um objeto { campo: mensagem } ou { erro: mensagem }
         setErrors(error.response.data);
       } else {
         alert("Erro ao distribuir moedas.");
@@ -94,7 +94,7 @@ function DashboardProfessorPage() {
 
   return (
     <div>
-      <h1>Dashboard do Professor</h1>
+      <h1>Dashboard do Admin</h1>
 
       {/* Saldo */}
       <div style={{ marginBottom: "20px", fontSize: "18px" }}>
@@ -105,15 +105,15 @@ function DashboardProfessorPage() {
       <form onSubmit={handleDistribuirMoedas} style={{ marginBottom: "40px" }}>
         <h2>Distribuir Moedas</h2>
         <select
-          value={alunoSelecionado}
-          onChange={(e) => setAlunoSelecionado(e.target.value)}
+          value={usuarioSelecionado}
+          onChange={(e) => setUsuarioSelecionado(e.target.value)}
           required
           style={{ display: "block", marginBottom: "10px", padding: "8px", width: "300px" }}
         >
-          <option value="">Selecione um aluno</option>
-          {alunos.map((aluno) => (
-            <option key={aluno.id} value={aluno.id}>
-              {aluno.nome}
+          <option value="">Selecione um usuário</option>
+          {usuarios.map((usuario) => (
+            <option key={usuario.id} value={usuario.id}>
+              {usuario.nome}
             </option>
           ))}
         </select>
@@ -156,7 +156,7 @@ function DashboardProfessorPage() {
       <table style={{ width: "100%", borderCollapse: "collapse" }}>
         <thead>
           <tr>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Aluno</th>
+            <th style={{ border: "1px solid black", padding: "8px" }}>Usuário</th>
             <th style={{ border: "1px solid black", padding: "8px" }}>Quantidade</th>
             <th style={{ border: "1px solid black", padding: "8px" }}>Motivo</th>
             <th style={{ border: "1px solid black", padding: "8px" }}>Data</th>
@@ -164,11 +164,11 @@ function DashboardProfessorPage() {
         </thead>
         <tbody>
           {historico.map((item) => {
-            // Busca o nome do aluno pelo destinoId
-            let nomeAluno = "Desconhecido";
-            const alunoEncontrado = alunos.find((a) => a.id === item.destinoId);
-            if (alunoEncontrado) {
-              nomeAluno = alunoEncontrado.nome;
+            // Busca o nome do usuário pelo destinoId
+            let nomeUsuario = "Desconhecido";
+            const usuarioEncontrado = usuarios.find((u) => u.id === item.destinoId);
+            if (usuarioEncontrado) {
+              nomeUsuario = usuarioEncontrado.nome;
             }
 
             let dataFormatada = "Data não disponível";
@@ -188,7 +188,7 @@ function DashboardProfessorPage() {
 
             return (
               <tr key={item.id}>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{nomeAluno}</td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>{nomeUsuario}</td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
                 <td style={{ border: "1px solid black", padding: "8px" }}>{dataFormatada}</td>
@@ -201,4 +201,4 @@ function DashboardProfessorPage() {
   );
 }
 
-export default DashboardProfessorPage;
+export default DashboardAdmin;

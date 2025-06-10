@@ -12,6 +12,7 @@ import DashboardAlunoPage from './pages/DashboardAlunoPage';
 import ExtratoPage from './pages/ExtratoPage';
 import CadastroVantagemPage from './pages/CadastroVantagemPage';
 import ResgateVantagemPage from './pages/ResgateVantagemPage';
+import DashboardAdmin from './pages/DashboardAdmin';
 
 function App() {
   const location = useLocation();
@@ -45,6 +46,7 @@ function App() {
           <Route path="/extrato" element={<ExtratoPage />} />
           <Route path="/cadastro-vantagem" element={<CadastroVantagemPage />} />
           <Route path="/resgate-vantagem" element={<ResgateVantagemPage />} />
+          <Route path="/dashboard-admin" element={<DashboardAdmin />} />
         </Routes>
       </div>
     </div>

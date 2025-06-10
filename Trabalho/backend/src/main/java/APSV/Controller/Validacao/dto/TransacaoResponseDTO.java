@@ -20,5 +20,5 @@ public class TransacaoResponseDTO{
 
         private LocalDateTime data;
         
-        private Integer quantidade; 
+        private Integer quantidade;
 }

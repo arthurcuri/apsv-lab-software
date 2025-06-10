@@ -5,10 +5,12 @@ import api from "../services/api";
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [errors, setErrors] = useState<{ email?: string; senha?: string }>({});
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({}); // Limpa erros anteriores
     try {
       const response = await api.post("/usuarios/login", {
         email,
@@ -28,14 +30,20 @@ function LoginPage() {
         navigate("/dashboard-aluno");
       } else if (tipo === "PROFESSOR") {
         navigate("/dashboard-professor");
-      }else if (tipo === "EMPRESA") {
+      } else if (tipo === "EMPRESA") {
         navigate("/cadastro-vantagem");
-      }else {
+        } else if (tipo === "ADMIN") {
+        navigate("/dashboard-admin");
+      } else {
         alert("Tipo de usuário não reconhecido!");
       }
-    } catch (error) {
-      console.error("Erro no login:", error);
-      alert("Credenciais inválidas!");
+    } catch (error: any) {
+      // Verifica se é erro de validação do backend
+      if (error.response && error.response.status === 400 && error.response.data) {
+        setErrors(error.response.data);
+      } else {
+        alert("Credenciais inválidas!");
+      }
     }
   };
 
@@ -56,17 +64,23 @@ function LoginPage() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          style={{ marginBottom: "10px", padding: "8px" }}
+          style={{ marginBottom: "5px", padding: "8px" }}
           required
         />
+        {errors.email && (
+          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em" }}>{errors.email}</span>
+        )}
         <input
           type="password"
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          style={{ marginBottom: "10px", padding: "8px" }}
+          style={{ marginBottom: "5px", padding: "8px" }}
           required
         />
+        {errors.senha && (
+          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em" }}>{errors.senha}</span>
+        )}
 
         {/* Esqueci minha senha */}
         <button

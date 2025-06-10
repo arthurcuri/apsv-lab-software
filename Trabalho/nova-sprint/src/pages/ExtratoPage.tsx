@@ -122,7 +122,14 @@ function ExtratoPage() {
               <td style={{ border: "1px solid black", padding: "8px" }}>{transacao.quantidade}</td>
               <td style={{ border: "1px solid black", padding: "8px" }}>{transacao.motivo}</td>
               <td style={{ border: "1px solid black", padding: "8px" }}>
-                {new Date(transacao.data).toLocaleDateString()}
+                {new Date(transacao.data).toLocaleString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit"
+                })}
               </td>
             </tr>
           ))}

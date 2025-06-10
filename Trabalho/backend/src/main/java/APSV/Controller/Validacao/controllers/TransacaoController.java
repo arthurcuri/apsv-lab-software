@@ -4,7 +4,9 @@ import APSV.Controller.Validacao.dto.TransacaoDTO;
 import APSV.Controller.Validacao.dto.TransacaoResponseDTO;
 import APSV.Controller.Validacao.models.Transacao;
 import APSV.Controller.Validacao.models.Usuario;
+import APSV.Controller.Validacao.models.Vantagem;
 import APSV.Controller.Validacao.repositories.UsuarioRepository;
+import APSV.Controller.Validacao.repositories.VantagemRepository;
 import APSV.Controller.Validacao.services.TransacaoService;
 import jakarta.validation.Valid;
 
@@ -21,6 +23,12 @@ public class TransacaoController {
 
     @Autowired
     private TransacaoService service;
+
+    @Autowired
+    private TransacaoService transacaoService;
+
+    @Autowired
+    private VantagemRepository vantagemRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -52,6 +60,40 @@ public class TransacaoController {
                 salva.getQuantidade());
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/resgatar")
+    public void resgatarVantagem(Long usuarioId, Long vantagemId) {
+        // Buscar usuário
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        // Buscar vantagem
+        Vantagem vantagem = vantagemRepository.findById(vantagemId)
+                .orElseThrow(() -> new RuntimeException("Vantagem não encontrada"));
+
+        // Verificar saldo
+        if (usuario.getMoedas() < vantagem.getCusto()) {
+            throw new RuntimeException("Saldo insuficiente para resgatar esta vantagem.");
+        }
+
+        // Debitar saldo do usuário
+        usuario.setMoedas(usuario.getMoedas() - vantagem.getCusto());
+        usuarioRepository.save(usuario);
+
+        // Creditar saldo ao admin (ID 1)
+        Usuario admin = usuarioRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("Admin não encontrado"));
+        admin.setMoedas(admin.getMoedas() + vantagem.getCusto());
+        usuarioRepository.save(admin);
+
+        // Criar transação
+        transacaoService.salvarTransacao(
+                usuario, // origem
+                admin, // destino
+                vantagem.getCusto(),
+                "Resgate de vantagem: " + vantagem.getNome());
+
     }
 
     @GetMapping

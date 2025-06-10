@@ -20,6 +20,15 @@ public void run(String... args) throws Exception {
     // Verifica se já existem usuários cadastrados
     if (usuarioRepository.count() == 0) {
         // Cria usuários iniciais
+        Usuario admin = new Usuario();
+        admin.setNome("Administrador");
+        admin.setCpf("000.000.000-00");
+        admin.setSenha("admin");
+        admin.setEmail("admin@gmail.com");
+        admin.setTipo("ADMIN");
+        admin.setMoedas(10000);
+        usuarioRepository.save(admin);
+
         Usuario c1 = new Usuario();
         c1.setNome("José Silva");
         c1.setCpf("123.456.789-01");
