@@ -65,7 +65,7 @@ function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           style={{ marginBottom: "5px", padding: "8px" }}
-          required
+          
         />
         {errors.email && (
           <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em" }}>{errors.email}</span>
@@ -76,7 +76,7 @@ function LoginPage() {
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           style={{ marginBottom: "5px", padding: "8px" }}
-          required
+          
         />
         {errors.senha && (
           <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em" }}>{errors.senha}</span>

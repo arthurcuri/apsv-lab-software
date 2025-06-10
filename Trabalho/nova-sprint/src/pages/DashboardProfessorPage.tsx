@@ -126,7 +126,6 @@ function DashboardProfessorPage() {
           value={quantidade}
           onChange={(e) => setQuantidade(Number(e.target.value))}
           style={{ display: "block", marginBottom: "10px", padding: "8px", width: "300px" }}
-          required
         />
         {errors.quantidade && (
           <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em", display: "block" }}>{errors.quantidade}</span>
@@ -137,7 +136,6 @@ function DashboardProfessorPage() {
           value={motivo}
           onChange={(e) => setMotivo(e.target.value)}
           style={{ display: "block", marginBottom: "10px", padding: "8px", width: "300px" }}
-          required
         />
         {errors.motivo && (
           <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em", display: "block" }}>{errors.motivo}</span>
