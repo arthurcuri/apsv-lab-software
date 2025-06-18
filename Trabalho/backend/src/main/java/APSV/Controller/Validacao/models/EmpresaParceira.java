@@ -1,5 +1,6 @@
 package APSV.Controller.Validacao.models;
 
+import APSV.Controller.Validacao.validadores.CNPJ;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +9,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,7 +40,7 @@ public class EmpresaParceira {
     private String senha;
     
     @NotBlank(message = "O CNPJ é obrigatório")
-    @Pattern(regexp = "\\d{2}\\.\\d{3}\\.\\d{3}/\\d{4}-\\d{2}", message = "CNPJ deve estar no formato XX.XXX.XXX/XXXX-XX")
+    @CNPJ(message = "CNPJ inválido")
     private String cnpj;
 
     @NotNull(message = "O campo moedas é obrigatório")

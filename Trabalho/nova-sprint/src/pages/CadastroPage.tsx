@@ -43,6 +43,7 @@ function CadastroPage() {
       }
       if (tipo === "ALUNO" || tipo === "PROFESSOR") {
         payload.cpf = cpf;
+        payload.cnpj = "60647662000180";
       }
 
       console.log("Payload enviado:", payload);

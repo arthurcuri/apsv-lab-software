@@ -1,5 +1,6 @@
 package APSV.Controller.Validacao.dto;
 
+import APSV.Controller.Validacao.validadores.CNPJ;
 import APSV.Controller.Validacao.validadores.CPF;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +26,7 @@ public class UsuarioCreateDTO {
     @CPF
     private String cpf;
 
+    @CNPJ
     private String cnpj;
 
     private String tipo;
