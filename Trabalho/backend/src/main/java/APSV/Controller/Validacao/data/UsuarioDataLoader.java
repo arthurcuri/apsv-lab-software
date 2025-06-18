@@ -22,7 +22,7 @@ public void run(String... args) throws Exception {
         // Cria usuários iniciais
         Usuario admin = new Usuario();
         admin.setNome("Administrador");
-        admin.setCpf("000.000.000-00");
+        admin.setCpf("122.797.686-07");
         admin.setSenha("admin");
         admin.setEmail("admin@gmail.com");
         admin.setTipo("ADMIN");
@@ -31,7 +31,7 @@ public void run(String... args) throws Exception {
 
         Usuario c1 = new Usuario();
         c1.setNome("José Silva");
-        c1.setCpf("123.456.789-01");
+        c1.setCpf("122.797.686-07");
         c1.setSenha("1234");
         c1.setEmail("jose@gmail.com");
         c1.setTipo("ALUNO");
@@ -40,7 +40,7 @@ public void run(String... args) throws Exception {
 
         Usuario c2 = new Usuario();
         c2.setNome("Maria Oliveira");
-        c2.setCpf("987.654.321-00");
+        c2.setCpf("122.797.686-07");
         c2.setSenha("1234");
         c2.setEmail("maria@gmail.com");
         c2.setTipo("ALUNO");
@@ -49,7 +49,7 @@ public void run(String... args) throws Exception {
 
         Usuario c3 = new Usuario();
         c3.setNome("Carlos Pereira");
-        c3.setCpf("111.222.333-44");
+        c3.setCpf("122.797.686-07");
         c3.setSenha("1234");
         c3.setEmail("carlos@gmail.com");
         c3.setTipo("PROFESSOR");
@@ -58,7 +58,7 @@ public void run(String... args) throws Exception {
 
         Usuario c4 = new Usuario();
         c4.setNome("Ana Costa");
-        c4.setCpf("555.666.777-88");
+        c4.setCpf("122.797.686-07");
         c4.setSenha("1234");
         c4.setEmail("ana@gmail.com");
         c4.setTipo("PROFESSOR");
@@ -67,7 +67,8 @@ public void run(String... args) throws Exception {
 
         Usuario c5 = new Usuario();
         c5.setNome("Microsft Corporation");
-        c5.setCnpj("12.345.678/0001-90");
+        c5.setCnpj("45.987.321/0001-09");
+        c5.setCpf("122.797.686-07");
         c5.setSenha("1234");
         c5.setEmail("microsoft@gmail.com");
         c5.setTipo("EMPRESA");
@@ -76,7 +77,8 @@ public void run(String... args) throws Exception {
 
         Usuario c6 = new Usuario();
         c6.setNome("Google LLC");
-        c6.setCnpj("98.765.432/0001-01");
+        c6.setCnpj("45.987.321/0001-09");
+        c6.setCpf("122.797.686-07");
         c6.setSenha("1234");
         c6.setEmail("google@gmail.com");
         c6.setTipo("EMPRESA");
