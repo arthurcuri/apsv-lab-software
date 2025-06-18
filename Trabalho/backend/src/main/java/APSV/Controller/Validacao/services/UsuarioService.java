@@ -92,7 +92,14 @@ public class UsuarioService {
         usuario.setNome(dto.getNome());
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
-        usuario.setCpf(dto.getCpf());
+        
+        // Para empresas, sempre mocka o CPF
+        if ("EMPRESA".equals(dto.getTipo())) {
+            usuario.setCpf("12279768607");
+        } else {
+            usuario.setCpf(dto.getCpf());
+        }
+        
         usuario.setCnpj(dto.getCnpj());
         usuario.setTipo(dto.getTipo() != null ? dto.getTipo() : "ALUNO");
         

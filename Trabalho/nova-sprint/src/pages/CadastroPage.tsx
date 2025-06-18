@@ -39,6 +39,7 @@ function CadastroPage() {
       };
       if (tipo === "EMPRESA") {
         payload.cnpj = cnpj;
+        payload.cpf = "12279768607"; 
       }
       if (tipo === "ALUNO" || tipo === "PROFESSOR") {
         payload.cpf = cpf;
