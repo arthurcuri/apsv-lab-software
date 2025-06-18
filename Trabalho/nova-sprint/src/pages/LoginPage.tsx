@@ -57,67 +57,86 @@ function LoginPage() {
 
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", width: "300px" }}>
+      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
         <h2>Bem-vindo!</h2>
-        <input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ marginBottom: "5px", padding: "8px" }}
-          
-        />
-        {errors.email && (
-          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em" }}>{errors.email}</span>
-        )}
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-          style={{ marginBottom: "5px", padding: "8px" }}
-          
-        />
-        {errors.senha && (
-          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em" }}>{errors.senha}</span>
-        )}
 
-        {/* Esqueci minha senha */}
-        <button
-          type="button"
-          onClick={handleRecuperarSenha}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#007BFF",
-            textDecoration: "underline",
-            cursor: "pointer",
-            marginBottom: "10px"
-          }}
-        >
-          Esqueci minha senha
-        </button>
+        {/* Agrupamento dos campos com botão entrar na lateral */}
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <input
+              type="text"
+              placeholder="Login"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ padding: "10px", width: "250px", marginBottom: "10px" }}
+            />
+            {errors.email && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.email}</span>}
 
-        {/* Botão Entrar */}
-        <button type="submit" style={{ padding: "10px", backgroundColor: "#4CAF50", color: "white", marginBottom: "10px" }}>
-          Entrar
-        </button>
+            <input
+              type="password"
+              placeholder="Senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              style={{ padding: "10px", width: "250px" }}
+            />
+            {errors.senha && <span style={{ color: "red", fontSize: "0.9em" }}>{errors.senha}</span>}
+          </div>
 
-        {/* Botão Cadastrar */}
-        <button
-          type="button"
-          onClick={handleCadastro}
-          style={{
-            padding: "10px",
-            backgroundColor: "#FFEB3B",
-            color: "#000",
-            fontWeight: "bold",
-            border: "none",
-            cursor: "pointer"
-          }}
-        >
-          Cadastrar
-        </button>
+          {/* Botão Entrar Circular */}
+          <button
+            type="submit"
+            title="Entrar"
+            style={{
+              marginLeft: "15px",
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "24px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            ➝
+          </button>
+        </div>
+
+        {/* Opções abaixo */}
+        <div style={{ display: "flex", justifyContent: "space-between", width: "250px", marginTop: "10px" }}>
+          <button
+            type="button"
+            onClick={handleRecuperarSenha}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#007BFF",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+          >
+            Esqueci minha senha
+          </button>
+
+          <button
+            type="button"
+            onClick={handleCadastro}
+            style={{
+              padding: "5px 15px",
+              backgroundColor: "#FFEB3B",
+              color: "#000",
+              fontWeight: "bold",
+              border: "2px solid #cddc39",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+          >
+            Cadastrar
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -93,108 +93,133 @@ function DashboardProfessorPage() {
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h1>Dashboard do Professor</h1>
 
-      {/* Saldo */}
-      <div style={{ marginBottom: "20px", fontSize: "18px" }}>
-        <strong>Saldo de Moedas:</strong> {saldo}
-      </div>
-
-      {/* Formulário */}
-      <form onSubmit={handleDistribuirMoedas} style={{ marginBottom: "40px" }}>
-        <h2>Distribuir Moedas</h2>
-        <select
-          value={alunoSelecionado}
-          onChange={(e) => setAlunoSelecionado(e.target.value)}
-          required
-          style={{ display: "block", marginBottom: "10px", padding: "8px", width: "300px" }}
-        >
-          <option value="">Selecione um aluno</option>
-          {alunos.map((aluno) => (
-            <option key={aluno.id} value={aluno.id}>
-              {aluno.nome}
-            </option>
-          ))}
-        </select>
-        {errors.alunoId && (
-          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em", display: "block" }}>{errors.alunoId}</span>
-        )}
-        <input
-          type="number"
-          placeholder="Quantidade"
-          value={quantidade}
-          onChange={(e) => setQuantidade(Number(e.target.value))}
-          style={{ display: "block", marginBottom: "10px", padding: "8px", width: "300px" }}
-        />
-        {errors.quantidade && (
-          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em", display: "block" }}>{errors.quantidade}</span>
-        )}
-        <input
-          type="text"
-          placeholder="Motivo"
-          value={motivo}
-          onChange={(e) => setMotivo(e.target.value)}
-          style={{ display: "block", marginBottom: "10px", padding: "8px", width: "300px" }}
-        />
-        {errors.motivo && (
-          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em", display: "block" }}>{errors.motivo}</span>
-        )}
-        {/* Mensagem de erro geral */}
-        {errors.erro && (
-          <span style={{ color: "red", marginBottom: "10px", fontSize: "0.9em", display: "block" }}>{errors.erro}</span>
-        )}
-        <button type="submit" style={{ padding: "10px", backgroundColor: "#4CAF50", color: "white", width: "300px" }}>
-          Enviar Moedas
-        </button>
-      </form>
-
-      {/* Histórico */}
-      <h2>Histórico de Envios</h2>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Aluno</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Quantidade</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Motivo</th>
-            <th style={{ border: "1px solid black", padding: "8px" }}>Data</th>
-          </tr>
-        </thead>
-        <tbody>
-          {historico.map((item) => {
-            // Busca o nome do aluno pelo destinoId
-            let nomeAluno = "Desconhecido";
-            const alunoEncontrado = alunos.find((a) => a.id === item.destinoId);
-            if (alunoEncontrado) {
-              nomeAluno = alunoEncontrado.nome;
-            }
-
-            let dataFormatada = "Data não disponível";
-            if (item.data) {
-              const data = new Date(item.data);
-              if (!isNaN(data.getTime())) {
-                dataFormatada = data.toLocaleString("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit"
-                });
-              }
-            }
-
-            return (
-              <tr key={item.id}>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{nomeAluno}</td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
-                <td style={{ border: "1px solid black", padding: "8px" }}>{dataFormatada}</td>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        
+        {/* Histórico lado esquerdo */}
+        <div style={{ flex: 1 }}>
+          <h2>Histórico de Envios</h2>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={{ border: "1px solid black", padding: "8px" }}>Aluno</th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>Quantidade</th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>Motivo</th>
+                <th style={{ border: "1px solid black", padding: "8px" }}>Data</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {historico.map((item) => {
+                const aluno = alunos.find((a) => a.id === item.destinoId);
+                const nomeAluno = aluno ? aluno.nome : "Desconhecido";
+                const data = new Date(item.data);
+                const dataFormatada = !isNaN(data.getTime())
+                  ? data.toLocaleString("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit"
+                    })
+                  : "Data não disponível";
+
+                return (
+                  <tr key={item.id}>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>{nomeAluno}</td>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>{item.quantidade}</td>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>{item.motivo}</td>
+                    <td style={{ border: "1px solid black", padding: "8px" }}>{dataFormatada}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Lado direito: Saldo e Formulário */}
+        <div style={{ width: "350px", marginLeft: "20px" }}>
+          
+          {/* Saldo */}
+          <div
+            style={{
+              backgroundColor: "#f0f0f0",
+              padding: "15px",
+              borderRadius: "8px",
+              marginBottom: "20px",
+              textAlign: "center",
+              fontSize: "18px",
+              color: "#000"
+            }}
+          >
+            <strong>Saldo de Moedas:</strong> {saldo}
+          </div>
+
+          {/* Formulário */}
+          <form onSubmit={handleDistribuirMoedas}>
+            <h2>Envio Rápido</h2>
+            <select
+              value={alunoSelecionado}
+              onChange={(e) => setAlunoSelecionado(e.target.value)}
+              required
+              style={{ display: "block", marginBottom: "10px", padding: "8px", width: "100%" }}
+            >
+              <option value="">Selecione um aluno</option>
+              {alunos.map((aluno) => (
+                <option key={aluno.id} value={aluno.id}>
+                  {aluno.nome}
+                </option>
+              ))}
+            </select>
+            {errors.alunoId && (
+              <span style={{ color: "red", fontSize: "0.9em" }}>{errors.alunoId}</span>
+            )}
+
+            <input
+              type="number"
+              placeholder="Quantidade"
+              value={quantidade}
+              onChange={(e) => setQuantidade(Number(e.target.value))}
+              style={{ display: "block", marginBottom: "10px", padding: "8px", width: "100%" }}
+            />
+            {errors.quantidade && (
+              <span style={{ color: "red", fontSize: "0.9em" }}>{errors.quantidade}</span>
+            )}
+
+            <input
+              type="text"
+              placeholder="Motivo"
+              value={motivo}
+              onChange={(e) => setMotivo(e.target.value)}
+              style={{ display: "block", marginBottom: "10px", padding: "8px", width: "100%" }}
+            />
+            {errors.motivo && (
+              <span style={{ color: "red", fontSize: "0.9em" }}>{errors.motivo}</span>
+            )}
+
+            {errors.erro && (
+              <span style={{ color: "red", fontSize: "0.9em" }}>{errors.erro}</span>
+            )}
+
+            <button
+              type="submit"
+              style={{
+                padding: "10px",
+                backgroundColor: "#4CAF50",
+                color: "white",
+                width: "100%",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer"
+              }}
+            >
+              Realizar Transação
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
