@@ -23,19 +23,6 @@ public class UsuarioService {
 
     // Criar usuário
     public UsuarioDTO criarUsuario(UsuarioCreateDTO dto) {
-        // Validação customizada baseada no tipo
-        String tipo = dto.getTipo() != null ? dto.getTipo() : "ALUNO";
-        
-        if ("EMPRESA".equals(tipo)) {
-            if (dto.getCnpj() == null || dto.getCnpj().trim().isEmpty()) {
-                throw new RuntimeException("CNPJ é obrigatório para empresas");
-            }
-        } else {
-            if (dto.getCpf() == null || dto.getCpf().trim().isEmpty()) {
-                throw new RuntimeException("CPF é obrigatório para alunos e professores");
-            }
-        }
-        
         Usuario usuario = converterParaEntity(dto);
         Usuario salvo = usuarioRepository.save(usuario);
         return converterParaDTO(salvo);

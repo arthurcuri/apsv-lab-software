@@ -223,7 +223,7 @@ function CadastroPage() {
           value={nome}
           onChange={(e) => setNome(e.target.value)}
           style={{ marginBottom: "10px", padding: "8px", borderRadius: "8px" }}
-          required
+          
         />
         <input
           type="email"
@@ -231,7 +231,7 @@ function CadastroPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           style={{ marginBottom: "10px", padding: "8px", borderRadius: "8px" }}
-          required
+          
         />
         {tipo === "EMPRESA" ? (
           <input
@@ -240,7 +240,7 @@ function CadastroPage() {
             value={cnpj}
             onChange={(e) => setCnpj(e.target.value)}
             style={{ marginBottom: "10px", padding: "8px", borderRadius: "8px" }}
-            required
+            
           />
         ) : (
           <input
@@ -249,7 +249,7 @@ function CadastroPage() {
             value={cpf}
             onChange={(e) => setCpf(e.target.value)}
             style={{ marginBottom: "10px", padding: "8px", borderRadius: "8px" }}
-            required
+            
           />
         )}
         <input
@@ -258,7 +258,7 @@ function CadastroPage() {
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
           style={{ marginBottom: "10px", padding: "8px", borderRadius: "8px" }}
-          required
+          
         />
         <input
           type="password"
@@ -266,7 +266,7 @@ function CadastroPage() {
           value={confirmarSenha}
           onChange={(e) => setConfirmarSenha(e.target.value)}
           style={{ marginBottom: "10px", padding: "8px", borderRadius: "8px" }}
-          required
+          
         />
         <button
           type="submit"
